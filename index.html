@@ -67,7 +67,7 @@
                 <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Design Asset & AI SaaS Platform</p>
             </div>
 
-            <div class="mb-6 bg-[#3b2d1d] border border-[#785427] text-[#fcd34d] px-4 py-3 rounded-2xl flex items-start gap-2.5 text-xs sm:text-sm shadow-md">
+            <div id="reg-warning-msg" class="hidden mb-6 bg-[#3b2d1d] border border-[#785427] text-[#fcd34d] px-4 py-3 rounded-2xl flex items-start gap-2.5 text-xs sm:text-sm shadow-md animate-fade-in">
                 <i class="ph-fill ph-warning-circle text-amber-400 text-lg flex-shrink-0 mt-0.5"></i>
                 <div class="leading-relaxed">
                     <strong>溫馨提醒：</strong>註冊確認信有時會跑到<strong>「垃圾郵件匣」</strong>，請記得前往確認唷！
@@ -569,15 +569,30 @@
             const editSelect = document.getElementById('lb-edit-category');
             const curFilter = filterSelect.value; const curEdit = editSelect.value;
             
-            filterSelect.innerHTML = '<option value="">📁 全部分類</option>';
+            // 1. 統計畫面上已載入資料的數量
+            const counts = { '全部分類': galleryData ? galleryData.length : 0 };
+            if (galleryData && galleryData.length > 0) {
+                galleryData.forEach(item => {
+                    const cat = (item.category === '其他' && item.customCategory) ? item.customCategory : (item.category || '未分類');
+                    counts[cat] = (counts[cat] || 0) + 1;
+                });
+            }
+            
+            // 2. 清空並重建主畫面的下拉選單 (標題加上總數)
+            filterSelect.innerHTML = `<option value="">📁 全部分類 (${counts['全部分類']})</option>`;
             editSelect.innerHTML = '';
             
+            // 3. 填入所有分類選項與對應數量
             currentCategories.forEach(cat => {
-                filterSelect.insertAdjacentHTML('beforeend', `<option value="${cat}">${cat}</option>`);
+                const countStr = counts[cat] > 0 ? ` (${counts[cat]})` : ' (0)';
+                // 主搜尋列：顯示數量
+                filterSelect.insertAdjacentHTML('beforeend', `<option value="${cat}">${cat}${countStr}</option>`);
+                // 燈箱編輯區：維持乾淨，不顯示數量
                 editSelect.insertAdjacentHTML('beforeend', `<option value="${cat}">${cat}</option>`);
             });
             
-            if(currentCategories.includes(curFilter)) filterSelect.value = curFilter;
+            // 4. 恢復原本選取的分類狀態
+            if(currentCategories.includes(curFilter) || curFilter === "") filterSelect.value = curFilter;
             if(currentCategories.includes(curEdit)) editSelect.value = curEdit;
         };
 
@@ -604,16 +619,19 @@
             e.target.className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-white bg-indigo-600 shadow-md";
             document.getElementById('tab-register-btn').className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-400 hover:text-white";
             formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); formForgot.classList.add('hidden'); hideAuthAlert();
+            document.getElementById('reg-warning-msg')?.classList.add('hidden');
         });
 
         document.getElementById('tab-register-btn').addEventListener('click', (e) => {
             e.target.className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-white bg-indigo-600 shadow-md";
             document.getElementById('tab-login-btn').className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-400 hover:text-white";
             formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); formForgot.classList.add('hidden'); hideAuthAlert();
+            document.getElementById('reg-warning-msg')?.classList.remove('hidden');
         });
 
         document.getElementById('btn-forgot-password').addEventListener('click', () => {
             formLogin.classList.add('hidden'); formRegister.classList.add('hidden'); formForgot.classList.remove('hidden'); hideAuthAlert();
+            document.getElementById('reg-warning-msg')?.classList.add('hidden');
         });
         document.getElementById('btn-back-login').addEventListener('click', () => document.getElementById('tab-login-btn').click());
 
@@ -1091,6 +1109,13 @@
                 await updateDoc(doc(db, "assets", currentLightboxItem.id), { category: newCat, customCategory: newCustom, tags: newTags, description: newDesc });
                 currentLightboxItem.category = newCat; currentLightboxItem.customCategory = newCustom; currentLightboxItem.tags = newTags; currentLightboxItem.description = newDesc;
                 const idx = galleryData.findIndex(i => i.id === currentLightboxItem.id); if(idx>-1) galleryData[idx] = {...currentLightboxItem};
+                
+                // 重新計算所有存在的分類並更新下拉選單數量
+                const uniqueCats = new Set(DEFAULT_CATEGORIES);
+                galleryData.forEach(item => { if (item.category && item.category !== '其他') uniqueCats.add(item.category); if (item.customCategory) uniqueCats.add(item.customCategory); });
+                currentCategories = [...Array.from(uniqueCats), "其他"]; 
+                updateCategoryDropdowns();
+                
                 document.getElementById('lb-btn-cancel-edit').click(); renderGallery(); showToast('資訊已更新', 'success'); openLightbox(currentLightboxItem);
             } catch (err) { showToast(`更新失敗`, 'error'); } finally { btn.disabled = false; btn.innerHTML = '儲存變更'; }
         });
