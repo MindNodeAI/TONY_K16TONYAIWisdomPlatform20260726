@@ -969,8 +969,9 @@
                 document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove());
                 document.getElementById('gallery-empty').classList.add('hidden');
                 
-                // 一次向雲端請求高達 200 筆資料，突破原本的 20 筆分頁限制
-                const q = query(collection(db, "assets"), orderBy("createdAt", "desc"), limit(200));
+                // 【核心修改】：移除原本的 limit(200) 限制，改為真正的「全庫掃描」。
+                // 這樣無論圖片多舊，只要符合關鍵字就絕對能被搜出來！
+                const q = query(collection(db, "assets"), orderBy("createdAt", "desc"));
                 const snap = await getDocs(q);
                 
                 galleryData = [];
@@ -985,7 +986,8 @@
                 currentCategories = [...Array.from(uniqueCats), "其他"]; updateCategoryDropdowns();
                 
                 renderGallery();
-                showToast('已從雲端同步最新深度資料！', 'success');
+                // 提示訊息加上總筆數，讓使用者知道系統真的掃描了全庫
+                showToast(`深度搜尋完成！共比對了 ${galleryData.length} 筆資料`, 'success');
             } catch(err) {
                 console.error(err);
                 showToast('雲端搜尋失敗', 'error');
