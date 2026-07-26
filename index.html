@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <!-- 加入 maximum-scale=1.0 與 user-scalable=0 防止行動裝置(尤其是 iOS)點擊輸入框時畫面意外放大 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>TONY老師的 AI創意智慧平台</title>
+    
+    <!-- 引入外部資源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', 'PingFang TC', 'Microsoft JhengHei', sans-serif; background-color: #0f172a; color: #f8fafc; }
+        
+        /* 瀑布流排版 */
+        .masonry-grid { column-count: 1; column-gap: 1.5rem; }
+        @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
+        @media (min-width: 1280px) { .masonry-grid { column-count: 4; } }
+        .masonry-item { break-inside: avoid; margin-bottom: 1.5rem; }
+        
+        /* 客製化卷軸 */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
+
+        /* 讀取動畫與轉場特效 */
+        .loader { border: 3px solid #334155; border-top: 3px solid #6366f1; border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col bg-slate-950 text-slate-100 overflow-x-hidden">
+
+    <div id="global-confirm-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[90] hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden p-6 text-center animate-fade-in">
+            <div class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500 border border-red-500/20">
+                <i class="ph ph-warning-circle text-3xl"></i>
+            </div>
+            <h3 id="confirm-title" class="text-lg font-bold text-white mb-2">確認操作</h3>
+            <p id="confirm-msg" class="text-xs text-slate-400 mb-6 leading-relaxed">您確定要執行此操作嗎？</p>
+            <div class="flex gap-3">
+                <button id="btn-confirm-cancel" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all">取消</button>
+                <button id="btn-confirm-ok" class="flex-1 py-2.5 bg-red-600 hover:bg-red-500 text-white rounded-xl text-sm font-semibold transition-all shadow-lg shadow-red-600/20 flex items-center justify-center gap-2">確認執行</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="auth-gate-view" class="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 relative overflow-hidden">
+        <!-- 背景光暈特效 -->
+        <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="w-full max-w-md bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-3xl p-8 shadow-2xl relative z-10 animate-fade-in">
+            
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-950 rounded-2xl shadow-lg shadow-indigo-500/10 mb-3 border border-slate-800 p-2">
+                    <img src="https://firebasestorage.googleapis.com/v0/b/k16-tony-ai-wisdom-platform.firebasestorage.app/o/assets%2F6av64EOvvqQNAIoXqcPfHC5BBeF3%2F1785039560457_1.png?alt=media&token=19b27497-4101-4436-bc80-b299741b7984" alt="Logo" class="w-full h-full object-contain">
+                </div>
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">TONY老師的 AI創意智慧平台</h1>
+                <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Design Asset & AI SaaS Platform</p>
+            </div>
+
+            <div class="mb-6 bg-[#3b2d1d] border border-[#785427] text-[#fcd34d] px-4 py-3 rounded-2xl flex items-start gap-2.5 text-xs sm:text-sm shadow-md">
+                <i class="ph-fill ph-warning-circle text-amber-400 text-lg flex-shrink-0 mt-0.5"></i>
+                <div class="leading-relaxed">
+                    <strong>溫馨提醒：</strong>註冊確認信有時會跑到<strong>「垃圾郵件匣」</strong>，請記得前往確認唷！
+                </div>
+            </div>
+
+            <div id="auth-alert" class="hidden mb-4 p-3 rounded-xl text-xs font-medium leading-relaxed"></div>
+
+            <div class="flex bg-slate-800/60 p-1 rounded-2xl mb-6 border border-slate-700/50">
+                <button id="tab-login-btn" class="flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-white bg-indigo-600 shadow-md">會員登入</button>
+                <button id="tab-register-btn" class="flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-400 hover:text-white">新用戶註冊</button>
+            </div>
+
+            <form id="form-login" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">電子信箱 (Email)</label>
+                    <div class="relative">
+                        <i class="ph ph-envelope-simple absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="email" id="login-email" required placeholder="yourname@example.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <div class="flex justify-between items-center mb-1.5">
+                        <label class="block text-xs font-semibold text-slate-300">登入密碼</label>
+                        <button type="button" id="btn-forgot-password" class="text-xs text-indigo-400 hover:text-indigo-300 hover:underline">忘記密碼？</button>
+                    </div>
+                    <div class="relative">
+                        <i class="ph ph-lock-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-10 pr-10 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                        <button type="button" class="toggle-password-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
+                            <i class="ph ph-eye text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit-login" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 relative">
+                    <i class="ph ph-sign-in text-lg"></i> 登入平台
+                </button>
+            </form>
+
+            <form id="form-register" class="space-y-4 hidden animate-fade-in">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">真實姓名</label>
+                    <div class="relative">
+                        <i class="ph ph-user absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="text" id="reg-name" required placeholder="例如：王小明" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">身分選擇</label>
+                    <div class="relative">
+                        <i class="ph ph-identification-card absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <select id="reg-identity" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                            <option value="TONY老師學員">TONY老師學員</option>
+                            <option value="非學員(一般訪客)" selected>非學員(一般訪客)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">電子信箱 (Email)</label>
+                    <div class="relative">
+                        <i class="ph ph-envelope-simple absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="email" id="reg-email" required placeholder="yourname@example.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">設定密碼 (至少 6 位數)</label>
+                    <div class="relative">
+                        <i class="ph ph-lock-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="password" id="reg-password" required minlength="6" placeholder="••••••••" class="w-full pl-10 pr-10 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                        <button type="button" class="toggle-password-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
+                            <i class="ph ph-eye text-lg"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <button type="submit" id="btn-submit-register" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2">
+                    <i class="ph ph-user-plus text-lg"></i> 立即註冊並發送驗證信
+                </button>
+            </form>
+
+            <form id="form-forgot" class="space-y-4 hidden animate-fade-in">
+                <div class="text-xs text-slate-400 mb-2 leading-relaxed">請輸入您的註冊 Email，系統將為您發送密碼重設連結：</div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">電子信箱 (Email)</label>
+                    <div class="relative">
+                        <i class="ph ph-envelope-simple absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
+                        <input type="email" id="forgot-email" required placeholder="yourname@example.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                    </div>
+                </div>
+
+                <div class="flex gap-2">
+                    <button type="button" id="btn-back-login" class="w-1/3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all">返回登入</button>
+                    <button type="submit" class="w-2/3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-all">發送重設信件</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="app-main-view" class="hidden flex-col min-h-screen animate-fade-in">
+        <nav class="sticky top-0 z-40 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- 客製化 Logo -->
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-slate-950 rounded-xl shadow-md border border-slate-800 p-1 flex items-center justify-center overflow-hidden">
+                            <img src="https://firebasestorage.googleapis.com/v0/b/k16-tony-ai-wisdom-platform.firebasestorage.app/o/assets%2F6av64EOvvqQNAIoXqcPfHC5BBeF3%2F1785039560457_1.png?alt=media&token=19b27497-4101-4436-bc80-b299741b7984" alt="Logo" class="w-full h-full object-contain">
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300 tracking-tight">AI 創意智慧平台</h1>
+                            <p class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Design Asset Manager</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 md:gap-4">
+                        <button id="btn-open-admin" class="hidden px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl text-xs transition-all shadow-md shadow-amber-500/20 flex items-center gap-1.5">
+                            <i class="ph-fill ph-shield-star text-base"></i> <span class="hidden sm:inline">進入管理後台</span>
+                        </button>
+                        <button id="btn-open-settings" class="p-2 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-xl transition-colors relative" title="API 設定">
+                            <i class="ph ph-gear text-2xl"></i>
+                        </button>
+                        <div class="h-6 w-px bg-slate-800 hidden md:block"></div>
+                        <div id="user-info-display" class="flex items-center gap-3"></div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
+                <div class="flex flex-col sm:flex-row w-full lg:w-auto gap-3 flex-grow">
+                    <!-- 關鍵字搜尋 -->
+                    <div class="relative w-full sm:w-64 group flex-shrink-0">
+                        <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-indigo-400 transition-colors"></i>
+                        <input type="text" id="search-input" placeholder="搜尋標籤、描述..." 
+                               class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-sm transition-all text-white placeholder:text-slate-500">
+                    </div>
+                    
+                    <!-- 分類篩選 -->
+                    <div class="relative w-full sm:w-48 flex-shrink-0">
+                        <select id="filter-category" class="w-full pl-4 pr-10 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-sm transition-all text-white appearance-none cursor-pointer">
+                            <option value="">📁 全部分類</option>
+                        </select>
+                        <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                    </div>
+
+                    <!-- 比例篩選 -->
+                    <div class="relative w-full sm:w-40 flex-shrink-0">
+                        <select id="filter-ratio" class="w-full pl-4 pr-10 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-sm transition-all text-white appearance-none cursor-pointer">
+                            <option value="">📐 全部版型</option>
+                            <option value="直式">直式</option>
+                            <option value="橫式">橫式</option>
+                            <option value="方形">方形</option>
+                        </select>
+                        <i class="ph ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"></i>
+                    </div>
+                </div>
+                
+                <div class="flex gap-3 w-full md:w-auto">
+                    <button id="btn-duplicates" class="hidden flex-1 md:flex-none items-center justify-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-300 px-4 py-2.5 rounded-2xl text-sm font-medium transition-all shadow-lg shadow-slate-900/30">
+                        <i class="ph ph-copy text-lg"></i> 清理重複
+                    </button>
+                    <button id="btn-upload" class="hidden flex-1 md:flex-none items-center justify-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-6 py-2.5 rounded-2xl text-sm font-medium transition-all shadow-lg shadow-indigo-600/30">
+                        <i class="ph ph-upload-simple text-lg"></i> 上傳新資產
+                    </button>
+                </div>
+                <input type="file" id="file-input" multiple accept="image/*" class="hidden">
+            </div>
+
+            <div id="gallery" class="masonry-grid">
+                <div id="gallery-loading" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400">
+                    <div class="loader mb-4 border-t-indigo-500"></div>
+                    <p class="text-sm">載入圖庫中...</p>
+                </div>
+                <div id="gallery-empty" class="hidden col-span-full py-20 flex flex-col items-center justify-center text-slate-400 animate-fade-in">
+                    <div class="w-20 h-20 bg-slate-900 rounded-3xl flex items-center justify-center mb-4 border border-slate-800">
+                        <i class="ph ph-image text-4xl text-slate-600"></i>
+                    </div>
+                    <p class="text-base font-medium text-slate-300 mb-1">查無圖片</p>
+                    <p class="text-xs text-slate-500">請嘗試更換搜尋關鍵字或分類</p>
+                </div>
+            </div>
+            
+            <div id="infinite-loading" class="hidden w-full py-8 flex-col items-center justify-center text-slate-400">
+                <div class="loader mb-2 w-5 h-5 border-t-indigo-500"></div>
+                <p class="text-xs">載入更多舊圖中...</p>
+            </div>
+        </main>
+    </div>
+
+    
+    <!-- 管理者後台 Modal (Mobile Responsive) -->
+    <div id="admin-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-5xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden animate-fade-in">
+            <div class="px-4 md:px-6 py-5 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                <div>
+                    <h2 class="text-base md:text-lg font-bold text-white flex items-center gap-2">
+                        <i class="ph-fill ph-shield-star text-amber-400 text-xl"></i> 管理者後台
+                    </h2>
+                    <p class="text-[10px] md:text-xs text-slate-400 mt-1">檢視系統全體會員資料、切換角色權限與匯出數據。</p>
+                </div>
+                <div class="flex items-center gap-2 md:gap-3">
+                    <button id="btn-export-csv" class="px-3 md:px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-[10px] md:text-xs font-semibold transition-all shadow-md flex items-center gap-1.5">
+                        <i class="ph ph-file-csv text-base"></i> <span class="hidden sm:inline">匯出 CSV</span>
+                    </button>
+                    <button id="btn-close-admin" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 flex items-center justify-center transition-colors">
+                        <i class="ph ph-x text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-grow overflow-y-auto p-0 sm:p-6">
+                <!-- 響應式表格外掛 overflow-x-auto -->
+                <div class="overflow-x-auto w-full">
+                    <table class="w-full text-left text-xs text-slate-300 min-w-[700px]">
+                        <thead class="bg-slate-800/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-700">
+                            <tr>
+                                <th class="px-4 py-3">會員資訊</th>
+                                <th class="px-4 py-3">身分類別</th>
+                                <th class="px-4 py-3">目前權限</th>
+                                <th class="px-4 py-3">登錄次數</th>
+                                <th class="px-4 py-3">註冊時間</th>
+                                <th class="px-4 py-3 text-right">管理操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-user-table-body" class="divide-y divide-slate-800 bg-slate-900/30"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Key 設定 Modal -->
+    <div id="settings-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden p-6 animate-fade-in">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="ph ph-gear text-indigo-400"></i> Gemini API 設定</h2>
+                <button id="btn-close-settings" class="text-slate-400 hover:text-white"><i class="ph ph-x text-xl"></i></button>
+            </div>
+            <div class="mb-4">
+                <label class="block text-xs font-semibold text-slate-300 mb-2">Gemini API 金鑰</label>
+                <input type="password" id="api-key-input" placeholder="AIzaSy..." class="w-full px-4 py-2.5 bg-slate-800 border border-slate-700 rounded-xl text-base sm:text-sm text-white focus:outline-none focus:border-indigo-500">
+                <p class="mt-2 text-[11px] text-slate-400">金鑰將安全地儲存在您的瀏覽器 LocalStorage 中。</p>
+            </div>
+            <div class="bg-indigo-950/40 rounded-xl p-3.5 border border-indigo-900/50 mb-6 text-xs text-indigo-300 leading-relaxed">
+                欲啟用 AI 自動標籤與 OCR 寫作功能，請前往 <a href="https://aistudio.google.com/app/apikey" target="_blank" class="font-bold underline hover:text-indigo-200">Google AI Studio</a> 免費申請。
+            </div>
+            <div class="flex justify-end">
+                <button id="btn-save-settings" class="px-5 py-2.5 rounded-xl text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 transition-colors">儲存設定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 上傳佇列 Modal -->
+    <div id="upload-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-4xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden animate-fade-in">
+            <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="ph ph-stack text-indigo-400"></i> 處理佇列</h2>
+                    <p class="text-xs text-slate-400 mt-0.5">圖片由本地壓縮後，透過真實 Gemini API 進行 OCR 與標籤生成。</p>
+                </div>
+                <button id="close-upload-modal" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 flex items-center justify-center"><i class="ph ph-x"></i></button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-4 md:p-6 bg-slate-950/50"><div id="queue-list" class="flex flex-col gap-4"></div></div>
+            <div class="px-6 py-4 border-t border-slate-800 bg-slate-900 flex justify-between items-center">
+                <div id="queue-stats" class="text-xs text-slate-400 font-medium">準備中...</div>
+                <div class="flex gap-3">
+                    <button id="btn-cancel-uploads" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:bg-slate-800">取消</button>
+                    <button id="btn-confirm-uploads" class="px-5 py-2 rounded-xl text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 flex items-center gap-1.5 transition-all">
+                        <i class="ph ph-cloud-arrow-up text-base"></i> 確定上傳
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 圖片燈箱 Modal (Lightbox) -->
+    <div id="lightbox" class="fixed inset-0 bg-slate-950/95 z-[60] hidden flex-col transition-opacity animate-fade-in">
+        <div class="h-16 flex justify-between items-center px-4 md:px-6 text-white bg-slate-900/80 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-indigo-500/20 text-indigo-400 flex items-center justify-center"><i class="ph ph-image text-lg"></i></div>
+                <span class="text-sm font-medium text-slate-200">資產預覽</span>
+            </div>
+            <div class="flex items-center gap-1 md:gap-2">
+                <button id="lb-btn-download" class="w-9 h-9 rounded-xl hover:bg-slate-800 flex items-center justify-center text-slate-300" title="下載原圖"><i class="ph ph-download-simple text-xl"></i></button>
+                <button id="lb-btn-share" class="w-9 h-9 rounded-xl hover:bg-slate-800 flex items-center justify-center text-slate-300" title="複製連結"><i class="ph ph-link text-xl"></i></button>
+                <button id="lb-btn-edit" class="w-9 h-9 rounded-xl hover:bg-indigo-900/30 flex items-center justify-center text-indigo-400 hidden" title="編輯資產"><i class="ph ph-pencil-simple text-xl"></i></button>
+                <button id="lb-btn-delete" class="w-9 h-9 rounded-xl hover:bg-red-900/30 flex items-center justify-center text-red-400 hidden" title="刪除資產"><i class="ph ph-trash text-xl"></i></button>
+                <button id="lb-btn-close" class="w-9 h-9 rounded-xl hover:bg-slate-800 flex items-center justify-center text-slate-300 ml-2"><i class="ph ph-x text-2xl"></i></button>
+            </div>
+        </div>
+
+        <div class="flex-grow flex flex-col md:flex-row overflow-hidden">
+            <div class="flex-grow p-4 md:p-6 flex items-center justify-center relative min-h-[40vh] md:min-h-0 bg-slate-950">
+                <img id="lb-image" src="" alt="Preview" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl">
+            </div>
+            <div class="w-full md:w-[420px] bg-slate-900 flex flex-col border-l border-slate-800 overflow-y-auto p-5 md:p-6 gap-6">
+                <div>
+                    <div class="flex items-center gap-2 text-slate-400 text-xs mb-3">
+                        <i class="ph ph-calendar-blank"></i> <span id="lb-date"></span>
+                        <span id="lb-ratio-badge" class="ml-auto px-2 py-0.5 bg-slate-800 rounded-md text-[10px] text-slate-400 border border-slate-700"></span>
+                    </div>
+                    
+                    <!-- 閱讀模式 -->
+                    <div id="lb-read-mode">
+                        <div class="flex flex-wrap gap-2 mb-4" id="lb-meta-tags"></div>
+                        <div id="lb-tags" class="flex flex-wrap gap-1.5 mb-4"></div>
+                        <p id="lb-desc" class="text-xs text-slate-300 leading-relaxed bg-slate-950/60 p-4 rounded-xl border border-slate-800"></p>
+                    </div>
+
+                    <!-- 編輯模式 -->
+                    <div id="lb-edit-mode" class="hidden flex-col gap-3 bg-slate-950/60 p-4 rounded-xl border border-slate-800">
+                        <div>
+                            <label class="text-[10px] text-slate-400 mb-1 block">分類</label>
+                            <select id="lb-edit-category" class="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white"></select>
+                            <input type="text" id="lb-edit-custom-category" placeholder="輸入自訂分類名稱" class="w-full mt-1.5 px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white hidden">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 mb-1 block">標籤 (逗號分隔)</label>
+                            <input type="text" id="lb-edit-tags" class="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                        </div>
+                        <div>
+                            <label class="text-[10px] text-slate-400 mb-1 block">描述內容</label>
+                            <textarea id="lb-edit-desc" rows="3" class="w-full px-2.5 py-1.5 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white resize-none"></textarea>
+                        </div>
+                        <div class="flex gap-2 justify-end mt-2">
+                            <button id="lb-btn-cancel-edit" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-medium transition-colors">取消</button>
+                            <button id="lb-btn-save-edit" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-semibold transition-colors">儲存變更</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AI 文章重寫區塊 -->
+                <div id="ai-rewrite-section" class="bg-indigo-950/30 border border-indigo-900/50 rounded-2xl p-5 relative overflow-hidden">
+                    <h3 class="text-xs font-bold text-indigo-300 flex items-center gap-2 mb-2"><i class="ph ph-sparkle"></i> Gemini 靈感行銷文案</h3>
+                    <p class="text-[11px] text-slate-400 mb-4">根據此圖的 OCR 文字 context，重寫為社群靈感文章。</p>
+                    <button id="btn-generate-article" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20">
+                        開始撰寫文章
+                    </button>
+                    <div id="article-output-area" class="mt-4 hidden flex-col gap-3">
+                        <textarea id="generated-article" rows="6" class="w-full p-3 bg-slate-950 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none resize-none leading-relaxed" readonly></textarea>
+                        <div class="flex gap-2">
+                            <button id="btn-copy-article" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"><i class="ph ph-copy"></i> 複製文章</button>
+                            <button id="btn-export-word" class="flex-1 py-2 bg-indigo-900/40 hover:bg-indigo-800 text-indigo-300 border border-indigo-800/50 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors"><i class="ph ph-file-doc"></i> 輸出 Word</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 清理重複 Modal -->
+    <div id="duplicate-modal" class="fixed inset-0 bg-slate-950/90 backdrop-blur-md z-[75] hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-5xl max-h-[90vh] shadow-2xl flex flex-col overflow-hidden animate-fade-in">
+            <div class="px-6 py-5 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                <div>
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="ph-fill ph-copy text-indigo-400 text-xl"></i> 重複資產清理工具</h2>
+                    <p class="text-xs text-slate-400 mt-1">系統依據「原始檔名」為您分組找出可能重複上傳的圖片。</p>
+                </div>
+                <button id="btn-close-duplicates" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 flex items-center justify-center"><i class="ph ph-x text-lg"></i></button>
+            </div>
+            <div class="flex-grow overflow-y-auto p-4 md:p-6 bg-slate-950/50" id="duplicate-list"></div>
+        </div>
+    </div>
+
+    <!-- 沙盒網域錯誤 Modal -->
+    <div id="sandbox-domain-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-slate-900 border border-red-900/50 rounded-3xl w-full max-w-md shadow-2xl overflow-hidden p-6 text-center animate-fade-in">
+            <div class="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 text-red-500"><i class="ph ph-warning-octagon text-3xl"></i></div>
+            <h3 class="text-lg font-bold text-white mb-2">登入遭到 Firebase 阻擋</h3>
+            <p class="text-xs text-slate-400 mb-4 text-left leading-relaxed">
+                因為您目前在沙盒預覽環境，Firebase 安全機制禁止陌生網域彈出登入視窗。<br><br>
+                <strong>唯一解法：</strong>請複製下方網域，至 Firebase 後台的 <code class="bg-slate-800 text-amber-300 px-1 py-0.5 rounded">Authentication > Settings > Authorized domains</code> 新增並儲存。
+            </p>
+            <div class="flex gap-2 mb-6">
+                <input type="text" id="sandbox-domain-input" readonly class="flex-1 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white text-center font-mono focus:outline-none select-all">
+                <button id="btn-copy-sandbox-domain" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-bold transition-all">複製</button>
+            </div>
+            <button id="btn-close-sandbox-modal" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all">我已設定完成，關閉視窗</button>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-[110] flex flex-col gap-2 pointer-events-none"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+        import { getFirestore, collection, doc, getDoc, setDoc, updateDoc, deleteDoc, getDocs, addDoc, query, orderBy, increment, serverTimestamp, limit, startAfter } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDOD-QDQsm2M9kmKHTOl4AkLVLoRBQtTaM",
+            authDomain: "k16-tony-ai-wisdom-platform.firebaseapp.com",
+            projectId: "k16-tony-ai-wisdom-platform",
+            storageBucket: "k16-tony-ai-wisdom-platform.firebasestorage.app",
+            messagingSenderId: "36896904322",
+            appId: "1:36896904322:web:2661efd37b384d43dc509b",
+            measurementId: "G-2RPHW5FZ9S"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        const SYSTEM_CREATOR_EMAIL = "mindnodeai@gmail.com";
+
+        // 全域變數狀態
+        let currentUser = null;
+        let currentUserRole = "user";
+        let uploadQueue = [];
+        let galleryData = [];
+        let currentLightboxItem = null;
+        let isProcessingAiQueue = false;
+        let isUploadingToFirebase = false;
+
+        let lastVisibleDoc = null;
+        let isFetchingMore = false;
+        const PAGE_SIZE = 20;
+
+        const DEFAULT_CATEGORIES = ["一鄉一蔬果", "數位行銷科技 ( AI MarTech)", "人間智慧", "微縮世界", "AI未來科技", "財經資訊", "產業發展觀察", "健康養生", "心靈雞湯"];
+        let currentCategories = [...DEFAULT_CATEGORIES, "其他"];
+
+        const showToast = (message, type = 'info') => {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            let bgClass = 'bg-slate-800 text-white';
+            let icon = '<i class="ph ph-info"></i>';
+            if (type === 'error') { bgClass = 'bg-red-600 text-white'; icon = '<i class="ph ph-warning-circle text-lg"></i>'; }
+            if (type === 'warning') { bgClass = 'bg-amber-500 text-slate-950'; icon = '<i class="ph ph-warning text-lg"></i>'; }
+            if (type === 'success') { bgClass = 'bg-emerald-600 text-white'; icon = '<i class="ph ph-check-circle text-lg"></i>'; }
+
+            toast.className = `flex items-center gap-2.5 px-5 py-3.5 rounded-2xl shadow-2xl text-xs font-semibold transition-all duration-300 transform translate-y-10 opacity-0 ${bgClass}`;
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+            
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('translate-y-10', 'opacity-0'));
+            setTimeout(() => {
+                toast.classList.add('translate-y-10', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 4000);
+        };
+
+        let confirmActionCallback = null;
+        window.showConfirm = (title, msg, onConfirm) => {
+            document.getElementById('confirm-title').textContent = title;
+            document.getElementById('confirm-msg').textContent = msg;
+            confirmActionCallback = onConfirm;
+            const modal = document.getElementById('global-confirm-modal');
+            modal.classList.remove('hidden'); modal.classList.add('flex');
+        };
+        
+        document.getElementById('btn-confirm-cancel').addEventListener('click', () => {
+            document.getElementById('global-confirm-modal').classList.add('hidden');
+            document.getElementById('global-confirm-modal').classList.remove('flex');
+            confirmActionCallback = null;
+        });
+
+        document.getElementById('btn-confirm-ok').addEventListener('click', async () => {
+            const btn = document.getElementById('btn-confirm-ok');
+            btn.disabled = true; btn.innerHTML = '<div class="loader w-4 h-4 mx-auto border-t-white"></div>';
+            if (confirmActionCallback) {
+                try { await confirmActionCallback(); } 
+                catch (err) { console.error("Confirm Action Error:", err); }
+            }
+            document.getElementById('global-confirm-modal').classList.add('hidden');
+            document.getElementById('global-confirm-modal').classList.remove('flex');
+            btn.disabled = false; btn.innerHTML = '確認執行';
+            confirmActionCallback = null;
+        });
+
+        const getApiKey = () => localStorage.getItem('gemini_api_key');
+        const checkApiKeyConfigured = () => {
+            if (!getApiKey()) { showToast('請先設定 Gemini API Key 才能使用 AI 功能', 'warning'); document.getElementById('btn-open-settings').click(); return false; }
+            return true;
+        };
+
+        const updateCategoryDropdowns = () => {
+            const filterSelect = document.getElementById('filter-category');
+            const editSelect = document.getElementById('lb-edit-category');
+            const curFilter = filterSelect.value; const curEdit = editSelect.value;
+            
+            filterSelect.innerHTML = '<option value="">📁 全部分類</option>';
+            editSelect.innerHTML = '';
+            
+            currentCategories.forEach(cat => {
+                filterSelect.insertAdjacentHTML('beforeend', `<option value="${cat}">${cat}</option>`);
+                editSelect.insertAdjacentHTML('beforeend', `<option value="${cat}">${cat}</option>`);
+            });
+            
+            if(currentCategories.includes(curFilter)) filterSelect.value = curFilter;
+            if(currentCategories.includes(curEdit)) editSelect.value = curEdit;
+        };
+
+        const authAlert = document.getElementById('auth-alert');
+        const showAuthAlert = (msg, type = 'error') => {
+            authAlert.classList.remove('hidden', 'bg-red-950/80', 'text-red-300', 'border-red-800', 'bg-emerald-950/80', 'text-emerald-300', 'border-emerald-800');
+            if (type === 'error') authAlert.classList.add('bg-red-950/80', 'text-red-300', 'border', 'border-red-800');
+            else authAlert.classList.add('bg-emerald-950/80', 'text-emerald-300', 'border', 'border-emerald-800');
+            authAlert.innerHTML = msg;
+        };
+        const hideAuthAlert = () => authAlert.classList.add('hidden');
+
+        document.querySelectorAll('.toggle-password-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const input = e.currentTarget.previousElementSibling; const icon = e.currentTarget.querySelector('i');
+                if (input.type === 'password') { input.type = 'text'; icon.className = 'ph ph-eye-slash text-lg'; } 
+                else { input.type = 'password'; icon.className = 'ph ph-eye text-lg'; }
+            });
+        });
+
+        const formLogin = document.getElementById('form-login'), formRegister = document.getElementById('form-register'), formForgot = document.getElementById('form-forgot');
+        
+        document.getElementById('tab-login-btn').addEventListener('click', (e) => {
+            e.target.className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-white bg-indigo-600 shadow-md";
+            document.getElementById('tab-register-btn').className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-400 hover:text-white";
+            formLogin.classList.remove('hidden'); formRegister.classList.add('hidden'); formForgot.classList.add('hidden'); hideAuthAlert();
+        });
+
+        document.getElementById('tab-register-btn').addEventListener('click', (e) => {
+            e.target.className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-white bg-indigo-600 shadow-md";
+            document.getElementById('tab-login-btn').className = "flex-1 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all text-slate-400 hover:text-white";
+            formRegister.classList.remove('hidden'); formLogin.classList.add('hidden'); formForgot.classList.add('hidden'); hideAuthAlert();
+        });
+
+        document.getElementById('btn-forgot-password').addEventListener('click', () => {
+            formLogin.classList.add('hidden'); formRegister.classList.add('hidden'); formForgot.classList.remove('hidden'); hideAuthAlert();
+        });
+        document.getElementById('btn-back-login').addEventListener('click', () => document.getElementById('tab-login-btn').click());
+
+        formRegister.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const btn = document.getElementById('btn-submit-register'); btn.disabled = true; btn.innerHTML = '處理中...';
+
+            try {
+                const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                await updateProfile(userCred.user, { displayName: document.getElementById('reg-name').value.trim() });
+                
+                await setDoc(doc(db, "user_profiles", userCred.user.uid), {
+                    uid: userCred.user.uid, email: email, realName: document.getElementById('reg-name').value.trim(), 
+                    identity: document.getElementById('reg-identity').value, role: email.toLowerCase() === SYSTEM_CREATOR_EMAIL ? "admin" : "user", 
+                    loginCount: 0, createdAt: new Date().toISOString()
+                });
+
+                await sendEmailVerification(userCred.user);
+                await signOut(auth);
+                showAuthAlert(`✅ 註冊成功！驗證郵件已發送至 <strong>${email}</strong>。<br>請至信箱點擊驗證連結後，再回到此處登入。`, 'success');
+                document.getElementById('tab-login-btn').click(); formRegister.reset();
+            } catch (err) {
+                showAuthAlert(`註冊失敗：${err.message}`, 'error');
+            } finally { btn.disabled = false; btn.innerHTML = '<i class="ph ph-user-plus text-lg"></i> 立即註冊並發送驗證信'; }
+        });
+
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btn-submit-login'); btn.disabled = true; btn.innerHTML = '登入中...';
+            try {
+                const userCred = await signInWithEmailAndPassword(auth, document.getElementById('login-email').value.trim(), document.getElementById('login-password').value);
+                if (!userCred.user.emailVerified && userCred.user.email.toLowerCase() !== SYSTEM_CREATOR_EMAIL) {
+                    await signOut(auth);
+                    showAuthAlert(`⚠️ 您的帳號尚未完成 Email 驗證！<br>請前往信箱點擊確認連結。`, 'error');
+                    btn.disabled = false; btn.innerHTML = '<i class="ph ph-sign-in text-lg"></i> 登入平台';
+                    return;
+                }
+                showToast("登入成功！歡迎回來", "success");
+            } catch (err) {
+                btn.disabled = false; btn.innerHTML = '<i class="ph ph-sign-in text-lg"></i> 登入平台';
+                if (err.code === 'auth/invalid-credential') showAuthAlert(`登入失敗：帳號密碼錯誤或使用者不存在。<br>如果您是第一次使用，請先點擊上方「新用戶註冊」！`, 'error');
+                else if (err.code === 'auth/unauthorized-domain') {
+                    document.getElementById('sandbox-domain-input').value = window.location.hostname || "未知網域";
+                    document.getElementById('sandbox-domain-modal').classList.remove('hidden'); document.getElementById('sandbox-domain-modal').classList.add('flex');
+                }
+                else showAuthAlert(`登入失敗：(${err.code})`, 'error');
+            }
+        });
+
+        document.getElementById('btn-copy-sandbox-domain').addEventListener('click', () => { document.getElementById('sandbox-domain-input').select(); document.execCommand('copy'); showToast('網域已複製！', 'success'); });
+        document.getElementById('btn-close-sandbox-modal').addEventListener('click', () => { document.getElementById('sandbox-domain-modal').classList.add('hidden'); document.getElementById('sandbox-domain-modal').classList.remove('flex'); });
+
+        formForgot.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try { await sendPasswordResetEmail(auth, document.getElementById('forgot-email').value.trim()); showAuthAlert(`✅ 密碼重設郵件已發送！`, 'success'); formForgot.reset(); } 
+            catch (err) { showAuthAlert(`發送失敗：${err.message}`, 'error'); }
+        });
+
+        onAuthStateChanged(auth, async (user) => {
+            const authGateView = document.getElementById('auth-gate-view'), appMainView = document.getElementById('app-main-view');
+            if (user && (user.emailVerified || user.email.toLowerCase() === SYSTEM_CREATOR_EMAIL)) {
+                currentUser = user;
+                const isCreator = user.email.toLowerCase() === SYSTEM_CREATOR_EMAIL;
+                
+                const userSnap = await getDoc(doc(db, "user_profiles", user.uid));
+                if (userSnap.exists()) {
+                    let profileData = userSnap.data();
+                    if (isCreator && profileData.role !== 'admin') { await updateDoc(doc(db, "user_profiles", user.uid), { role: 'admin' }); profileData.role = 'admin'; }
+                    currentUserRole = profileData.role || (isCreator ? 'admin' : 'user');
+                    await updateDoc(doc(db, "user_profiles", user.uid), { loginCount: increment(1) });
+                }
+
+                authGateView.classList.add('hidden'); appMainView.classList.remove('hidden', 'flex-col'); appMainView.classList.add('flex', 'flex-col');
+                
+                if (currentUserRole === 'admin') document.getElementById('btn-open-admin').classList.remove('hidden');
+                
+                const showCreatorBtns = isCreator ? 'remove' : 'add';
+                document.getElementById('btn-upload').classList[showCreatorBtns]('hidden');
+                document.getElementById('btn-duplicates').classList[showCreatorBtns]('hidden');
+
+                document.getElementById('user-info-display').innerHTML = `
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-md uppercase">${(user.displayName || user.email)[0]}</div>
+                        <div class="hidden sm:block text-left"><p class="text-xs font-semibold text-slate-200">${user.displayName || '會員'}</p><p class="text-[10px] text-slate-400">${currentUserRole === 'admin' ? '👑 管理者' : '一般會員'}</p></div>
+                    </div>
+                    <button id="btn-logout" class="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-xl transition-colors"><i class="ph ph-sign-out text-xl"></i></button>
+                `;
+                document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); showToast("已登出", "info"); });
+                
+                fetchGallery();
+            } else {
+                currentUser = null; currentUserRole = "user";
+                authGateView.classList.remove('hidden'); appMainView.classList.add('hidden'); appMainView.classList.remove('flex');
+            }
+        });
+
+        document.getElementById('btn-open-admin').addEventListener('click', async () => { if (currentUserRole !== 'admin') return; await renderAdminUserTable(); document.getElementById('admin-modal').classList.remove('hidden'); document.getElementById('admin-modal').classList.add('flex'); });
+        document.getElementById('btn-close-admin').addEventListener('click', () => { document.getElementById('admin-modal').classList.add('hidden'); document.getElementById('admin-modal').classList.remove('flex'); });
+
+        async function renderAdminUserTable() {
+            const tbody = document.getElementById('admin-user-table-body');
+            tbody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-slate-500"><div class="loader mx-auto mb-2"></div>載入會員名單中...</td></tr>`;
+            try {
+                const querySnapshot = await getDocs(collection(db, "user_profiles"));
+                let members = []; querySnapshot.forEach(docSnap => members.push({ id: docSnap.id, ...docSnap.data() }));
+                window.currentAdminMemberList = members;
+
+                tbody.innerHTML = members.map(m => {
+                    const isCreator = m.email?.toLowerCase() === SYSTEM_CREATOR_EMAIL;
+                    const dateStr = m.createdAt ? new Date(m.createdAt).toLocaleDateString('zh-TW', { year: 'numeric', month: '2-digit', day: '2-digit' }) : '未知';
+                    return `
+                        <tr class="hover:bg-slate-800/40 transition-colors">
+                            <td class="px-4 py-3"><div class="font-bold text-white whitespace-nowrap">${m.realName || '未填寫'}</div><div class="text-[11px] text-slate-400 font-mono">${m.email}</div></td>
+                            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-lg text-[10px] font-semibold ${m.identity === 'TONY老師學員' ? 'bg-indigo-950 text-indigo-300' : 'bg-slate-800 text-slate-300'} whitespace-nowrap">${m.identity || '一般訪客'}</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-lg text-[10px] font-bold ${m.role === 'admin' ? 'bg-amber-950 text-amber-300' : 'bg-slate-800 text-slate-400'} whitespace-nowrap">${isCreator ? '👑 系統創作者' : (m.role === 'admin' ? '管理者' : '一般會員')}</span></td>
+                            <td class="px-4 py-3 font-mono font-bold text-slate-200 whitespace-nowrap">${m.loginCount || 1} 次</td>
+                            <td class="px-4 py-3 text-slate-400 text-[11px] whitespace-nowrap">${dateStr}</td>
+                            <td class="px-4 py-3 text-right">
+                                ${isCreator ? `<span class="text-[11px] text-amber-500 font-semibold italic">保護</span>` : `
+                                    <div class="flex justify-end gap-2">
+                                        <button onclick="toggleUserRole('${m.id}', '${m.role}')" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg text-[11px] font-medium transition-colors whitespace-nowrap">${m.role === 'admin' ? '降為 User' : '升為 Admin'}</button>
+                                        <button onclick="triggerUserDelete('${m.id}')" class="px-2.5 py-1 bg-red-950/60 hover:bg-red-900 text-red-300 rounded-lg text-[11px] font-medium transition-colors whitespace-nowrap">刪除</button>
+                                    </div>
+                                `}
+                            </td>
+                        </tr>`;
+                }).join('');
+            } catch (err) { showToast("無法載入會員清單", "error"); }
+        }
+
+        window.toggleUserRole = async (docId, currentRole) => {
+            try { await updateDoc(doc(db, "user_profiles", docId), { role: currentRole === 'admin' ? 'user' : 'admin' }); showToast(`權限已更新`, "success"); renderAdminUserTable(); } 
+            catch (err) { showToast("操作失敗", "error"); }
+        };
+
+        window.triggerUserDelete = (docId) => {
+            window.showConfirm("刪除會員", "確定要永久刪除此會員資料嗎？此動作無法復原。", async () => {
+                await deleteDoc(doc(db, "user_profiles", docId));
+                showToast("已刪除會員資料", "info");
+                renderAdminUserTable();
+            });
+        };
+
+        document.getElementById('btn-export-csv').addEventListener('click', () => {
+            const members = window.currentAdminMemberList || []; if (members.length === 0) return;
+            let csvContent = "\ufeffEmail,真實姓名,身分類別,權限角色,登錄次數,註冊時間,UID\n";
+            members.forEach(m => {
+                const role = m.email?.toLowerCase() === SYSTEM_CREATOR_EMAIL ? "系統創作者" : (m.role === 'admin' ? '管理者' : '一般會員');
+                csvContent += `"${m.email || ''}","${m.realName || ''}","${m.identity || ''}","${role}",${m.loginCount || 1},"${m.createdAt ? new Date(m.createdAt).toLocaleString('zh-TW') : ''}","${m.uid || ''}"\n`;
+            });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })); link.download = `Members_${Date.now()}.csv`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        });
+
+        document.getElementById('btn-open-settings').addEventListener('click', () => { document.getElementById('api-key-input').value = getApiKey() || ''; document.getElementById('settings-modal').classList.remove('hidden'); document.getElementById('settings-modal').classList.add('flex'); });
+        document.getElementById('btn-close-settings').addEventListener('click', () => { document.getElementById('settings-modal').classList.add('hidden'); document.getElementById('settings-modal').classList.remove('flex'); });
+        document.getElementById('btn-save-settings').addEventListener('click', () => {
+            const key = document.getElementById('api-key-input').value.trim();
+            if (key) { localStorage.setItem('gemini_api_key', key); showToast('API Key 已儲存', 'success'); } else { localStorage.removeItem('gemini_api_key'); }
+            document.getElementById('btn-close-settings').click();
+        });
+
+        document.getElementById('btn-upload').addEventListener('click', () => { if (checkApiKeyConfigured()) document.getElementById('file-input').click(); });
+
+        document.getElementById('file-input').addEventListener('change', async (e) => {
+            let files = Array.from(e.target.files); if (files.length === 0) return;
+            if (files.length > 10) { showToast(`為避免系統過載，每次限傳 10 張，已為您保留前 10 張。`, 'warning'); files = files.slice(0, 10); }
+
+            document.getElementById('upload-modal').classList.remove('hidden'); document.getElementById('upload-modal').classList.add('flex');
+            for (let file of files) {
+                const ratio = await new Promise((res) => {
+                    const img = new Image(); img.onload = () => { URL.revokeObjectURL(img.src); res(img.width / img.height > 1.2 ? '橫式' : img.width / img.height < 0.8 ? '直式' : '方形'); }; img.src = URL.createObjectURL(file);
+                });
+                uploadQueue.push({
+                    id: 'q_' + Math.random().toString(36).substr(2, 9),
+                    originalFile: file, previewUrl: URL.createObjectURL(file), status: 'pending', category: currentCategories[0], customCategory: '', aspectRatio: ratio, tags: [], description: '', compressedFile: null
+                });
+            }
+            renderQueue(); e.target.value = ''; processNextInAiQueue();
+        });
+
+        async function processNextInAiQueue() {
+            if (isProcessingAiQueue) return; isProcessingAiQueue = true;
+            while (true) {
+                const item = uploadQueue.find(i => i.status === 'pending'); if (!item) break;
+                try {
+                    item.status = 'compressing'; renderQueue();
+                    item.compressedFile = await imageCompression(item.originalFile, { maxSizeMB: 1, maxWidthOrHeight: 2048, useWebWorker: true });
+                    item.status = 'analyzing'; renderQueue();
+                    
+                    const base64Str = (await new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(item.compressedFile); r.onload=()=>res(r.result); r.onerror=rej; })).split(',')[1];
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${getApiKey()}`, {
+                        method: 'POST', headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ contents: [{ parts: [{ text: `請分析這張圖片，用繁體中文回覆。嚴格以 JSON 格式回傳包含 "tags" (字串陣列,最多5個) 與 "description" (詳細圖片描述與OCR文字)。請勿包含任何 markdown 標記。` }, { inline_data: { mime_type: item.compressedFile.type, data: base64Str } }] }], generationConfig: { temperature: 0.2 } })
+                    });
+                    if (!res.ok) throw new Error("API Request Failed");
+                    const data = await res.json();
+                    let textResp = data.candidates[0].content.parts[0].text;
+                    const start = textResp.indexOf('{'); const end = textResp.lastIndexOf('}');
+                    if (start > -1 && end > -1) {
+                        const parsed = JSON.parse(textResp.substring(start, end + 1));
+                        item.tags = parsed.tags || []; item.description = parsed.description || '';
+                    } else { item.tags = ["分析失敗"]; item.description = "無法解析 AI 回傳格式"; }
+                    item.status = 'ready';
+                } catch (err) { item.status = 'error'; console.error("OCR Error:", err); }
+                renderQueue();
+            }
+            isProcessingAiQueue = false;
+        }
+
+        window.handleQueueInput = (id, field, val) => { const i = uploadQueue.find(x => x.id === id); if(i) { i[field] = val; if(field==='category') { i.customCategory = ''; renderQueue(); } } };
+        window.removeQueueItem = (id) => { uploadQueue = uploadQueue.filter(x => x.id !== id); renderQueue(); };
+
+        function renderQueue() {
+            if (uploadQueue.length === 0 && !isUploadingToFirebase) { document.getElementById('upload-modal').classList.add('hidden'); document.getElementById('upload-modal').classList.remove('flex'); return; }
+            document.getElementById('queue-list').innerHTML = uploadQueue.map(item => {
+                let badge = ''; let dis = item.status !== 'ready' || isUploadingToFirebase;
+                if (item.status === 'pending') badge = `<span class="px-2 py-0.5 bg-slate-800 text-slate-400 rounded text-[10px]">排隊中</span>`;
+                else if (item.status === 'compressing') badge = `<span class="px-2 py-0.5 bg-amber-950 text-amber-300 rounded text-[10px]">壓縮中</span>`;
+                else if (item.status === 'analyzing') badge = `<span class="px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded text-[10px] flex items-center gap-1"><div class="loader w-2.5 h-2.5 border-t-indigo-300"></div> AI辨識中</span>`;
+                else if (item.status === 'uploading') badge = `<span class="px-2 py-0.5 bg-blue-950 text-blue-300 rounded text-[10px] animate-pulse">雲端寫入中...</span>`;
+                else if (item.status === 'ready') badge = `<span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 rounded text-[10px]">就緒</span>`;
+                
+                return `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex gap-4 transition-all ${isUploadingToFirebase ? 'opacity-70 grayscale-[30%]' : ''}">
+                    <div class="w-24 h-24 sm:w-32 sm:h-32 flex-shrink-0 bg-slate-950 rounded-xl overflow-hidden relative">
+                        <img src="${item.previewUrl}" class="w-full h-full object-cover">
+                        <span class="absolute bottom-1.5 left-1.5 bg-black/80 text-white text-[9px] px-1.5 py-0.5 rounded font-bold border border-slate-700">${item.aspectRatio}</span>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-between text-xs">
+                        <div class="flex justify-between items-center mb-2">${badge} ${!dis ? `<button onclick="removeQueueItem('${item.id}')" class="text-slate-500 hover:text-red-400"><i class="ph ph-trash text-base"></i></button>` : ''}</div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-2">
+                            <div>
+                                <select onchange="window.handleQueueInput('${item.id}', 'category', this.value)" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded text-white" ${dis?'disabled':''}>
+                                    ${currentCategories.map(c => `<option value="${c}" ${item.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+                                </select>
+                                <input type="text" placeholder="輸入自訂分類" value="${item.customCategory}" onchange="window.handleQueueInput('${item.id}', 'customCategory', this.value.trim())" class="w-full mt-1 px-2 py-1 bg-slate-950 border border-slate-800 rounded text-white ${item.category === '其他' ? '' : 'hidden'}" ${dis?'disabled':''}>
+                            </div>
+                            <div><input type="text" value="${item.tags.join(', ')}" onchange="window.handleQueueInput('${item.id}', 'tags', this.value.split(',').map(t=>t.trim()).filter(t=>t))" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded text-white" ${dis?'disabled':''} placeholder="標籤 (逗號分隔)"></div>
+                        </div>
+                        <div><textarea rows="2" onchange="window.handleQueueInput('${item.id}', 'description', this.value)" class="w-full px-2 py-1.5 bg-slate-950 border border-slate-800 rounded text-white resize-none" ${dis?'disabled':''} placeholder="AI 將自動填入圖片描述...">${item.description}</textarea></div>
+                    </div>
+                </div>`;
+            }).join('');
+            
+            const btn = document.getElementById('btn-confirm-uploads');
+            const rCount = uploadQueue.filter(i => i.status === 'ready').length, pCount = uploadQueue.filter(i => ['pending', 'compressing', 'analyzing'].includes(i.status)).length;
+            document.getElementById('queue-stats').innerHTML = `<span class="font-bold text-white">${rCount}</span> 個項目已準備就緒 ${pCount > 0 ? `<span class="text-amber-400 ml-2">• ${pCount} 處理中...</span>` : ''} ${isUploadingToFirebase ? `<span class="text-blue-400 ml-2 font-bold animate-pulse">• 正在寫入雲端...</span>` : ''}`;
+
+            if (isUploadingToFirebase) {
+                btn.disabled = true; btn.innerHTML = '<div class="loader w-4 h-4 border-t-white mr-2"></div> 上傳中，請稍候...';
+                btn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-slate-700'); btn.classList.remove('bg-indigo-600', 'hover:bg-indigo-500');
+            } else if (pCount > 0) {
+                btn.disabled = true; btn.innerHTML = '<div class="loader w-4 h-4 border-t-white mr-2"></div> AI 辨識中...';
+                btn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-slate-700'); btn.classList.remove('bg-indigo-600');
+            } else if (rCount > 0) {
+                btn.disabled = false; btn.innerHTML = '<i class="ph ph-cloud-arrow-up text-base"></i> 確定上傳';
+                btn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-slate-700'); btn.classList.add('bg-indigo-600', 'hover:bg-indigo-500');
+            } else btn.disabled = true;
+        }
+
+        document.getElementById('close-upload-modal').addEventListener('click', () => { if(!isUploadingToFirebase) { uploadQueue=[]; renderQueue(); } });
+        document.getElementById('btn-cancel-uploads').addEventListener('click', () => { if(!isUploadingToFirebase) { uploadQueue=[]; renderQueue(); } });
+
+        document.getElementById('btn-confirm-uploads').addEventListener('click', async () => {
+            if (!currentUser || isUploadingToFirebase) return;
+            isUploadingToFirebase = true; renderQueue();
+            const readyItems = uploadQueue.filter(i => i.status === 'ready');
+            
+            for (let item of readyItems) {
+                try {
+                    item.status = 'uploading'; renderQueue();
+                    const storageFilename = `${Date.now()}_${item.originalFile.name}`;
+                    const uploadResult = await uploadBytesResumable(ref(storage, `assets/${currentUser.uid}/${storageFilename}`), item.compressedFile);
+                    await addDoc(collection(db, "assets"), {
+                        url: await getDownloadURL(uploadResult.ref), tags: item.tags, description: item.description,
+                        category: item.category, customCategory: item.category === '其他' ? item.customCategory : '',
+                        aspectRatio: item.aspectRatio, storageFilename: storageFilename, filename: item.originalFile.name,
+                        uid: currentUser.uid, createdAt: serverTimestamp()
+                    });
+                    item.status = 'done';
+                } catch (err) { item.status = 'error'; console.error(err); }
+                renderQueue();
+            }
+            isUploadingToFirebase = false; showToast("上傳完畢！", "success"); uploadQueue = []; renderQueue(); fetchGallery();
+        });
+
+        async function fetchGallery(loadMore = false) {
+            if (isFetchingMore) return; isFetchingMore = true;
+            if (!loadMore) { document.getElementById('gallery-loading').classList.remove('hidden'); galleryData = []; lastVisibleDoc = null; document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove()); } 
+            else { document.getElementById('infinite-loading').classList.remove('hidden'); document.getElementById('infinite-loading').classList.add('flex'); }
+
+            try {
+                let q = loadMore && lastVisibleDoc ? query(collection(db, "assets"), orderBy("createdAt", "desc"), startAfter(lastVisibleDoc), limit(PAGE_SIZE)) : query(collection(db, "assets"), orderBy("createdAt", "desc"), limit(PAGE_SIZE));
+                const snap = await getDocs(q);
+                if (!snap.empty) { lastVisibleDoc = snap.docs[snap.docs.length - 1]; snap.forEach(d => galleryData.push({ id: d.id, ...d.data() })); }
+                
+                const uniqueCats = new Set(DEFAULT_CATEGORIES);
+                galleryData.forEach(item => { if (item.category && item.category !== '其他') uniqueCats.add(item.category); if (item.customCategory) uniqueCats.add(item.customCategory); });
+                currentCategories = [...Array.from(uniqueCats), "其他"]; updateCategoryDropdowns();
+                renderGallery();
+            } catch (err) { console.error("Fetch Gallery Error:", err); showToast('載入圖片失敗', 'error'); } 
+            finally {
+                document.getElementById('gallery-loading').classList.add('hidden');
+                document.getElementById('infinite-loading').classList.add('hidden'); document.getElementById('infinite-loading').classList.remove('flex');
+                isFetchingMore = false;
+            }
+        }
+
+        function renderGallery() {
+            document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove());
+            const term = document.getElementById('search-input').value.toLowerCase().trim(), cat = document.getElementById('filter-category').value, ratio = document.getElementById('filter-ratio').value;
+
+            const filtered = galleryData.filter(item => {
+                let mTerm = !term || (item.tags?.some(t => t.toLowerCase().includes(term)) || item.description?.toLowerCase().includes(term) || item.category?.toLowerCase().includes(term) || item.customCategory?.toLowerCase().includes(term));
+                let mCat = !cat || item.category === cat || item.customCategory === cat;
+                let mRatio = !ratio || item.aspectRatio === ratio;
+                return mTerm && mCat && mRatio;
+            });
+
+            if (filtered.length === 0) { document.getElementById('gallery-empty').classList.remove('hidden'); return; }
+            document.getElementById('gallery-empty').classList.add('hidden');
+
+            filtered.forEach(item => {
+                const dispCat = item.category === '其他' && item.customCategory ? item.customCategory : (item.category || '未分類');
+                const card = document.createElement('div'); card.className = 'masonry-item relative group cursor-pointer rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 transition-all hover:border-indigo-500/50 animate-fade-in';
+                card.innerHTML = `
+                    <img src="${item.url}" onerror="this.src='https://placehold.co/400x300/1e293b/475569?text=Missing'" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
+                        <div class="flex gap-2 mb-2"><span class="px-2 py-0.5 bg-indigo-500 text-white text-[10px] font-bold rounded">${dispCat}</span><span class="px-2 py-0.5 bg-black/60 text-slate-300 text-[10px] rounded border border-slate-600">${item.aspectRatio || '未判斷'}</span></div>
+                        <p class="text-xs text-slate-300 line-clamp-2">${item.description || ''}</p>
+                    </div>`;
+                card.addEventListener('click', () => openLightbox(item));
+                document.getElementById('gallery').appendChild(card);
+            });
+        }
+
+        document.getElementById('search-input').addEventListener('input', renderGallery); 
+        document.getElementById('filter-category').addEventListener('change', renderGallery); 
+        document.getElementById('filter-ratio').addEventListener('change', renderGallery);
+
+        window.addEventListener('scroll', () => {
+            if (!currentUser || document.getElementById('app-main-view').classList.contains('hidden') || isFetchingMore) return;
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
+                if (document.getElementById('search-input').value === '' && document.getElementById('filter-category').value === '' && document.getElementById('filter-ratio').value === '') fetchGallery(true);
+            }
+        });
+
+        const lightbox = document.getElementById('lightbox');
+        function openLightbox(item) {
+            currentLightboxItem = item;
+            document.getElementById('lb-image').src = item.url;
+            document.getElementById('lb-date').textContent = item.createdAt ? new Date(item.createdAt.toDate()).toLocaleDateString('zh-TW') : '未知時間';
+            document.getElementById('lb-ratio-badge').textContent = item.aspectRatio || '比例未知';
+            
+            const isCreator = currentUser && currentUser.email?.toLowerCase() === SYSTEM_CREATOR_EMAIL;
+            document.getElementById('lb-btn-delete').classList.toggle('hidden', !isCreator);
+            document.getElementById('lb-btn-edit').classList.toggle('hidden', !isCreator);
+            
+            document.getElementById('lb-read-mode').classList.remove('hidden'); document.getElementById('lb-edit-mode').classList.add('hidden'); document.getElementById('lb-edit-mode').classList.remove('flex');
+            document.getElementById('article-output-area').classList.add('hidden'); document.getElementById('article-output-area').classList.remove('flex');
+            
+            const dispCat = item.category === '其他' && item.customCategory ? item.customCategory : (item.category || '未分類');
+            document.getElementById('lb-meta-tags').innerHTML = `<span class="px-2.5 py-1 bg-indigo-950 text-indigo-300 rounded-md text-xs font-bold">${dispCat}</span>`;
+            document.getElementById('lb-tags').innerHTML = (item.tags||[]).map(t => `<span class="px-2.5 py-1 bg-slate-800 text-indigo-300 rounded-xl text-xs">${t}</span>`).join('');
+            document.getElementById('lb-desc').textContent = item.description || '無描述';
+
+            lightbox.classList.remove('hidden'); lightbox.classList.add('flex');
+        }
+        
+        document.getElementById('lb-btn-close').addEventListener('click', () => { lightbox.classList.add('hidden'); lightbox.classList.remove('flex'); });
+
+        window.deleteAssetRecord = async (assetItem) => {
+            try { await deleteObject(ref(storage, `assets/${assetItem.uid}/${assetItem.storageFilename || assetItem.filename}`)); } catch(e) { console.warn("Storage deletion warning:", e); }
+            await deleteDoc(doc(db, "assets", assetItem.id));
+            galleryData = galleryData.filter(item => item.id !== assetItem.id); renderGallery();
+        };
+
+        document.getElementById('lb-btn-delete').addEventListener('click', () => {
+            if (!currentLightboxItem) return;
+            window.showConfirm("刪除圖片", "此操作將從雲端永久刪除該圖片，且無法復原。", async () => {
+                await window.deleteAssetRecord(currentLightboxItem); showToast('圖片已成功刪除', 'success');
+                lightbox.classList.add('hidden'); lightbox.classList.remove('flex');
+                if (!document.getElementById('duplicate-modal').classList.contains('hidden')) window.renderDuplicateGroups();
+            });
+        });
+
+        document.getElementById('lb-btn-download').addEventListener('click', async () => {
+            if (!currentLightboxItem) return;
+            try {
+                const response = await fetch(currentLightboxItem.url); if (!response.ok) throw new Error('網路異常');
+                const url = URL.createObjectURL(await response.blob()); const a = document.createElement('a'); a.href = url; a.download = currentLightboxItem.filename || 'download.jpg';
+                document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+            } catch (err) { window.open(currentLightboxItem.url, '_blank'); showToast('已安全開啟原圖，請手動右鍵另存', 'info'); }
+        });
+
+        document.getElementById('lb-btn-share').addEventListener('click', () => {
+            if (!currentLightboxItem) return;
+            const temp = document.createElement('input'); temp.value = currentLightboxItem.url; document.body.appendChild(temp); temp.select(); document.execCommand('copy'); document.body.removeChild(temp);
+            showToast('已成功複製圖片專屬直接網址！', 'success');
+        });
+
+        document.getElementById('lb-btn-edit').addEventListener('click', () => {
+            if (!currentLightboxItem) return;
+            document.getElementById('lb-edit-category').value = currentLightboxItem.category || '未分類';
+            document.getElementById('lb-edit-tags').value = (currentLightboxItem.tags || []).join(', ');
+            document.getElementById('lb-edit-desc').value = currentLightboxItem.description || '';
+            document.getElementById('lb-read-mode').classList.add('hidden'); document.getElementById('lb-edit-mode').classList.remove('hidden'); document.getElementById('lb-edit-mode').classList.add('flex');
+        });
+
+        document.getElementById('lb-edit-category').addEventListener('change', (e) => {
+            const customInput = document.getElementById('lb-edit-custom-category');
+            if(e.target.value === '其他') { customInput.classList.remove('hidden'); customInput.value = currentLightboxItem.customCategory || ''; } 
+            else customInput.classList.add('hidden');
+        });
+
+        document.getElementById('lb-btn-cancel-edit').addEventListener('click', () => { document.getElementById('lb-read-mode').classList.remove('hidden'); document.getElementById('lb-edit-mode').classList.add('hidden'); document.getElementById('lb-edit-mode').classList.remove('flex'); });
+
+        document.getElementById('lb-btn-save-edit').addEventListener('click', async () => {
+            if (!currentLightboxItem) return; const btn = document.getElementById('lb-btn-save-edit'); btn.disabled = true; btn.innerHTML = '儲存中...';
+            try {
+                const newCat = document.getElementById('lb-edit-category').value, newTags = document.getElementById('lb-edit-tags').value.split(',').map(t=>t.trim()).filter(t=>t), newDesc = document.getElementById('lb-edit-desc').value;
+                const newCustom = newCat === '其他' ? document.getElementById('lb-edit-custom-category').value.trim() : '';
+                await updateDoc(doc(db, "assets", currentLightboxItem.id), { category: newCat, customCategory: newCustom, tags: newTags, description: newDesc });
+                currentLightboxItem.category = newCat; currentLightboxItem.customCategory = newCustom; currentLightboxItem.tags = newTags; currentLightboxItem.description = newDesc;
+                const idx = galleryData.findIndex(i => i.id === currentLightboxItem.id); if(idx>-1) galleryData[idx] = {...currentLightboxItem};
+                document.getElementById('lb-btn-cancel-edit').click(); renderGallery(); showToast('資訊已更新', 'success'); openLightbox(currentLightboxItem);
+            } catch (err) { showToast(`更新失敗`, 'error'); } finally { btn.disabled = false; btn.innerHTML = '儲存變更'; }
+        });
+
+        const btnGen = document.getElementById('btn-generate-article');
+        btnGen.addEventListener('click', async () => {
+            if (!currentLightboxItem || !checkApiKeyConfigured()) return;
+            btnGen.disabled = true; btnGen.innerHTML = `<div class="loader w-3 h-3 border-t-white"></div>`;
+            try {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${getApiKey()}`, {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ contents: [{ parts: [{ text: `請根據以下資訊撰寫一篇行銷文案 (繁體中文)：\n標籤: ${currentLightboxItem.tags?.join(',')}\n內文/描述: ${currentLightboxItem.description}` }] }] })
+                });
+                const data = await res.json();
+                document.getElementById('generated-article').value = data.candidates[0].content.parts[0].text;
+                document.getElementById('article-output-area').classList.remove('hidden'); document.getElementById('article-output-area').classList.add('flex');
+                showToast('文章生成完成', 'success');
+            } catch (err) { showToast('生成失敗', 'error'); } finally { btnGen.disabled = false; btnGen.innerHTML = '重新撰寫'; }
+        });
+
+        document.getElementById('btn-copy-article').addEventListener('click', () => { const ta = document.getElementById('generated-article'); ta.select(); document.execCommand('copy'); showToast('文章已複製', 'success'); });
+        
+        document.getElementById('btn-export-word').addEventListener('click', () => {
+            const text = document.getElementById('generated-article').value; if (!text) return;
+            const html = `<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><style>body{font-family:'微軟正黑體',sans-serif;line-height:1.6;font-size:12pt;}</style></head><body>${text.replace(/\n/g, '<br>')}</body></html>`;
+            const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' })); link.download = `AI靈感文案_${Date.now()}.doc`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link); showToast('Word 檔案已下載', 'success');
+        });
+
+        document.getElementById('btn-duplicates').addEventListener('click', () => { window.renderDuplicateGroups(); document.getElementById('duplicate-modal').classList.remove('hidden'); document.getElementById('duplicate-modal').classList.add('flex'); });
+        document.getElementById('btn-close-duplicates').addEventListener('click', () => { document.getElementById('duplicate-modal').classList.add('hidden'); document.getElementById('duplicate-modal').classList.remove('flex'); });
+
+        window.renderDuplicateGroups = () => {
+            const groups = {}; galleryData.forEach(item => { const name = item.filename || '未知檔案'; if (!groups[name]) groups[name] = []; groups[name].push(item); });
+            const dups = Object.entries(groups).filter(([_, items]) => items.length > 1);
+
+            if (dups.length === 0) { document.getElementById('duplicate-list').innerHTML = `<div class="py-20 text-center text-slate-400">太棒了！目前沒有發現任何重複的圖片</div>`; return; }
+
+            document.getElementById('duplicate-list').innerHTML = dups.map(([filename, items]) => `
+                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-5 animate-fade-in">
+                    <h3 class="text-sm font-bold text-slate-200 mb-4 pb-3 border-b border-slate-800 flex justify-between"><span><i class="ph ph-file-image"></i> ${filename}</span><span class="text-xs text-rose-400 bg-rose-500/10 px-2 py-1 rounded">發現 ${items.length} 份</span></h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        ${items.map(item => `
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl overflow-hidden flex flex-col justify-between">
+                                <img src="${item.url}" onerror="this.src='https://placehold.co/400x300/1e293b/475569?text=Missing'" class="w-full h-32 object-cover">
+                                <div class="p-3">
+                                    <div class="text-[10px] text-slate-500 mb-2 truncate">上傳於：${item.createdAt ? new Date(item.createdAt.toDate()).toLocaleDateString() : '未知'}</div>
+                                    <button onclick="window.triggerDuplicateDelete('${item.id}')" class="w-full py-1.5 bg-red-950/60 hover:bg-red-600 text-red-400 hover:text-white rounded-lg text-xs font-semibold border border-red-900/50 flex items-center justify-center gap-1.5 transition-all">
+                                        <i class="ph ph-trash"></i> 刪除此備份
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        window.triggerDuplicateDelete = (assetId) => {
+            const assetItem = galleryData.find(i => i.id === assetId);
+            if (assetItem) {
+                window.showConfirm("清理重複圖片", "確定要刪除這張重複上傳的圖片嗎？", async () => {
+                    await window.deleteAssetRecord(assetItem);
+                    showToast('已成功清理一份重複檔案', 'success');
+                    window.renderDuplicateGroups();
+                });
+            }
+        };
+    </script>
+</body>
+</html>
