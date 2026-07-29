@@ -988,81 +988,78 @@
             const originalHtml = btn.innerHTML;
             btn.disabled = true; 
             
-            // UI 初始化：清空現有畫面，準備即時呈現
+            let progressPill = document.getElementById('floating-progress-pill');
+            if (!progressPill) {
+                progressPill = document.createElement('div');
+                progressPill.id = "floating-progress-pill";
+                progressPill.className = "fixed top-24 left-1/2 -translate-x-1/2 z-[100] flex bg-indigo-600/95 backdrop-blur-md text-white px-6 py-3.5 rounded-full shadow-2xl shadow-indigo-900/50 border border-indigo-400/50 items-center gap-3 transition-all animate-fade-in";
+                document.body.appendChild(progressPill);
+            }
+            progressPill.innerHTML = `<div class="loader w-5 h-5 border-t-white"></div><div class="font-bold text-sm tracking-wide">後台高速同步中：已載入 <span id="pill-count" class="text-amber-300 text-xl mx-1 font-mono">0</span> 張...</div>`;
+            progressPill.classList.remove('hidden');
+            progressPill.classList.replace('bg-red-950/95', 'bg-indigo-600/95');
+
+            // 🔥 絕不白畫面：舊畫面留在原地，背景用暫存陣列默默抓資料
             document.getElementById('gallery-loading').classList.remove('hidden');
-            document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove());
-            document.getElementById('gallery-empty').classList.add('hidden');
-            
-            galleryData = [];
-            window.refreshGlobalCategories();
+            let tempGalleryData = []; 
+            window.isCloudSearched = true; // 標記已啟動全庫搜尋
             
             let currentBatchDoc = null;
             let totalFetched = 0;
-            const BATCH_SIZE = 200; // 核心優化：加快速度，每次分批處理 200 筆
-            const MAX_FETCH = 5000; // 核心優化：將總防護上限大幅拉高到 5000 張，確保能挖出深層資料
+            const BATCH_SIZE = 1000; // 放大封包到 1000，極大幅度減少斷線機率
+            const MAX_FETCH = 15000; 
 
             try {
-                // 【串流分批載入迴圈】
                 while (totalFetched < MAX_FETCH) {
-                    // 動態更新按鈕文字，即時回饋載入進度
-                    btn.innerHTML = `<div class="loader w-4 h-4 border-t-white mx-auto"></div><span class="whitespace-nowrap ml-2">雲端撈取中 ${totalFetched}...</span>`;
-                    
-                    // 🚨 終極修復：Firebase 分頁必須搭配 orderBy！
-                    // 我們改用系統內建的檔案 ID ("__name__") 來排序，保證第二批(200~400)、第三批能完美接力，且絕不過濾舊圖！
                     let q = currentBatchDoc 
                         ? query(collection(db, "assets"), orderBy("__name__"), startAfter(currentBatchDoc), limit(BATCH_SIZE)) 
                         : query(collection(db, "assets"), orderBy("__name__"), limit(BATCH_SIZE));
                     
-                    const snap = await getDocs(q);
+                    let snap;
+                    try {
+                        snap = await getDocs(q);
+                    } catch (dbErr) {
+                        console.warn("重連中...", dbErr);
+                        progressPill.innerHTML = `<i class="ph ph-warning-circle text-amber-300 text-xl"></i><div class="font-bold text-sm">網路微幅抖動，自動重連中...</div>`;
+                        await new Promise(r => setTimeout(r, 2000)); 
+                        snap = await getDocs(q);
+                        progressPill.innerHTML = `<div class="loader w-5 h-5 border-t-white"></div><div class="font-bold text-sm tracking-wide">已恢復連線，繼續載入： <span id="pill-count" class="text-amber-300 text-xl mx-1 font-mono">${totalFetched}</span> 張...</div>`;
+                    }
                     
-                    // 如果這批沒資料了，提早結束迴圈
                     if (snap.empty) break; 
-                    
-                    // 記錄這批的最後一筆，作為下一批的起點
                     currentBatchDoc = snap.docs[snap.docs.length - 1];
                     
                     let batchData = [];
                     snap.forEach(d => batchData.push({ id: d.id, ...d.data() }));
-                    
-                    // 將這批資料加入總庫 (先不排序，也不畫出畫面，減少負擔)
-                    galleryData.push(...batchData);
+                    tempGalleryData.push(...batchData);
                     totalFetched += batchData.length;
                     
-                    // 釋放主執行緒：非常短暫的暫停，讓按鈕數字可以跳動，但絕不卡死
-                    await new Promise(resolve => setTimeout(resolve, 10));
-                    
-                    // 如果這批抓回來的數量小於 BATCH_SIZE，代表資料庫真正見底了
-                    if (snap.docs.length < BATCH_SIZE) break;
+                    document.getElementById('pill-count').textContent = totalFetched;
                 }
                 
-                // 【關鍵修復：全部資料抓完後，再一次性處理與渲染！】
-                btn.innerHTML = `<div class="loader w-4 h-4 border-t-white mx-auto"></div><span class="whitespace-nowrap ml-2">正在排版中...</span>`;
-                await new Promise(resolve => setTimeout(resolve, 50)); // 給瀏覽器喘息空間
+                progressPill.innerHTML = `<i class="ph-fill ph-check-circle text-emerald-400 text-xl"></i><div class="font-bold text-sm">同步完畢！共 ${totalFetched} 張，正在排版...</div>`;
+                progressPill.classList.replace('bg-indigo-600/95', 'bg-slate-900/95');
                 
-                // 🌟 透過 JavaScript 在瀏覽器端重新排序，有時間的排前面，老圖墊底
+                // 全部載完後，才覆蓋正式陣列並排序
+                galleryData = tempGalleryData;
                 galleryData.sort((a, b) => {
                     let timeA = a.createdAt ? a.createdAt.seconds : 0;
                     let timeB = b.createdAt ? b.createdAt.seconds : 0;
                     return timeB - timeA;
                 });
                 
-                // 統整分類與畫出圖片 (全域只執行一次，記憶體零負擔！)
                 window.refreshGlobalCategories();
-                renderGallery();
+                renderGallery(false); // 呼叫最新引擎，它會自動只畫出前 50 張防當機
 
-                if (galleryData.length > 0) {
-                    showToast(`深度搜尋完成！分批載入了 ${galleryData.length} 張歷史圖片`, 'success');
-                } else {
-                    showToast(`雲端目前完全沒有任何圖片`, 'warning');
-                }
+                if (galleryData.length > 0) showToast(`雲端圖庫同步成功！`, 'success');
+
             } catch(err) { 
-                console.error("分批載入失敗:", err); 
-                showToast(`雲端搜尋失敗: ${err.message}`, 'error'); 
-            } 
-            finally { 
-                btn.disabled = false; 
-                btn.innerHTML = originalHtml; 
+                progressPill.innerHTML = `<i class="ph-fill ph-x-circle text-red-400 text-xl"></i><div class="font-bold text-sm">連線嚴重中斷，請稍後重試</div>`;
+                progressPill.classList.replace('bg-indigo-600/95', 'bg-red-950/95');
+            } finally { 
+                btn.disabled = false; btn.innerHTML = originalHtml; 
                 document.getElementById('gallery-loading').classList.add('hidden'); 
+                setTimeout(() => progressPill.classList.add('hidden'), 4000);
             }
         });
 
