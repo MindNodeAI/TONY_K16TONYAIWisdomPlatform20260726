@@ -1183,7 +1183,7 @@
             if (!currentLightboxItem || !checkApiKeyConfigured()) return;
             btnGen.disabled = true; btnGen.innerHTML = `<div class="loader w-3 h-3 border-t-white"></div>`;
             try {
-                const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${getApiKey()}`, {
+                const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-3.7-flash:generateContent?key=${getApiKey()}`, {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ contents: [{ parts: [{ text: `請根據以下資訊撰寫一篇行銷文案 (繁體中文)：\n標籤: ${currentLightboxItem.tags?.join(',')}\n內文/描述: ${currentLightboxItem.description}` }] }] })
                 });
