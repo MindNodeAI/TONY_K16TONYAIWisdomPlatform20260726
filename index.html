@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-    <title>TONY老師的 AI創意智慧平台</title>
+    <title>AI 創意智慧平台 | TONY STUDIO</title>
     
     <!-- 引入外部資源 -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -53,7 +53,7 @@
     </div>
 
     <!-- 登入畫面 -->
-    <div id="auth-gate-view" class="min-h-screen w-full flex items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 relative overflow-hidden">
+    <div id="auth-gate-view" class="min-h-screen w-full flex flex-col items-center justify-center p-4 bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 relative overflow-hidden">
         <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/20 rounded-full blur-3xl pointer-events-none"></div>
         <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
@@ -63,11 +63,10 @@
                 <div class="inline-flex items-center justify-center w-16 h-16 bg-slate-950 rounded-2xl shadow-lg shadow-indigo-500/10 mb-3 border border-slate-800 p-2">
                     <img src="https://firebasestorage.googleapis.com/v0/b/k16-tony-ai-wisdom-platform.firebasestorage.app/o/assets%2F6av64EOvvqQNAIoXqcPfHC5BBeF3%2F1785039560457_1.png?alt=media&token=19b27497-4101-4436-bc80-b299741b7984" alt="Logo" class="w-full h-full object-contain">
                 </div>
-                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">TONY老師的 AI創意智慧平台</h1>
+                <h1 class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">AI 創意智慧平台</h1>
                 <p class="text-xs text-slate-400 mt-1 uppercase tracking-wider font-semibold">Design Asset & AI SaaS Platform</p>
             </div>
 
-            <!-- 溫馨提醒 (預設隱藏，註冊時顯示) -->
             <div id="reg-warning-msg" class="hidden mb-6 bg-[#3b2d1d] border border-[#785427] text-[#fcd34d] px-4 py-3 rounded-2xl flex items-start gap-2.5 text-xs sm:text-sm shadow-md animate-fade-in">
                 <i class="ph-fill ph-warning-circle text-amber-400 text-lg flex-shrink-0 mt-0.5"></i>
                 <div class="leading-relaxed">
@@ -90,7 +89,6 @@
                         <input type="email" id="login-email" required placeholder="yourname@example.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
-
                 <div>
                     <div class="flex justify-between items-center mb-1.5">
                         <label class="block text-xs font-semibold text-slate-300">登入密碼</label>
@@ -99,12 +97,9 @@
                     <div class="relative">
                         <i class="ph ph-lock-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
                         <input type="password" id="login-password" required placeholder="••••••••" class="w-full pl-10 pr-10 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
-                        <button type="button" class="toggle-password-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
-                            <i class="ph ph-eye text-lg"></i>
-                        </button>
+                        <button type="button" class="toggle-password-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"><i class="ph ph-eye text-lg"></i></button>
                     </div>
                 </div>
-
                 <button type="submit" id="btn-submit-login" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 relative">
                     <i class="ph ph-sign-in text-lg"></i> 登入平台
                 </button>
@@ -118,7 +113,6 @@
                         <input type="text" id="reg-name" required placeholder="例如：王小明" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">身分選擇</label>
                     <div class="relative">
@@ -129,7 +123,6 @@
                         </select>
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">電子信箱 (Email)</label>
                     <div class="relative">
@@ -137,18 +130,14 @@
                         <input type="email" id="reg-email" required placeholder="yourname@example.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
-
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">設定密碼 (至少 6 位數)</label>
                     <div class="relative">
                         <i class="ph ph-lock-key absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg"></i>
                         <input type="password" id="reg-password" required minlength="6" placeholder="••••••••" class="w-full pl-10 pr-10 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
-                        <button type="button" class="toggle-password-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
-                            <i class="ph ph-eye text-lg"></i>
-                        </button>
+                        <button type="button" class="toggle-password-btn absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200"><i class="ph ph-eye text-lg"></i></button>
                     </div>
                 </div>
-
                 <button type="submit" id="btn-submit-register" class="w-full py-3 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-sm font-semibold shadow-lg shadow-emerald-600/30 transition-all flex items-center justify-center gap-2">
                     <i class="ph ph-user-plus text-lg"></i> 立即註冊並發送驗證信
                 </button>
@@ -163,12 +152,15 @@
                         <input type="email" id="forgot-email" required placeholder="yourname@example.com" class="w-full pl-10 pr-4 py-2.5 bg-slate-800/80 border border-slate-700 rounded-xl text-sm text-white placeholder:text-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-all">
                     </div>
                 </div>
-
                 <div class="flex gap-2">
                     <button type="button" id="btn-back-login" class="w-1/3 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-sm font-medium transition-all">返回登入</button>
                     <button type="submit" class="w-2/3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-sm font-semibold transition-all">發送重設信件</button>
                 </div>
             </form>
+        </div>
+        
+        <div class="mt-8 text-center text-xs text-slate-500 relative z-10 font-medium tracking-wide">
+            &copy; <script>document.write(new Date().getFullYear())</script> TONY STUDIO (楊文澤顧問) 版權所有
         </div>
     </div>
 
@@ -183,13 +175,13 @@
                         </div>
                         <div>
                             <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-300 tracking-tight">AI 創意智慧平台</h1>
-                            <p class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Design Asset Manager</p>
+                            <p class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Powered by TONY STUDIO</p>
                         </div>
                     </div>
 
                     <div class="flex items-center gap-3 md:gap-4">
                         <button id="btn-open-admin" class="hidden px-3.5 py-1.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-bold rounded-xl text-xs transition-all shadow-md shadow-amber-500/20 flex items-center gap-1.5">
-                            <i class="ph-fill ph-shield-star text-base"></i> <span class="hidden sm:inline">進入管理後台</span>
+                            <i class="ph-fill ph-shield-star text-base"></i> <span class="hidden sm:inline">管理後台</span>
                         </button>
                         <button id="btn-open-settings" class="p-2 text-slate-400 hover:text-indigo-400 hover:bg-slate-800 rounded-xl transition-colors relative" title="API 設定">
                             <i class="ph ph-gear text-2xl"></i>
@@ -201,18 +193,15 @@
             </div>
         </nav>
 
-        <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full flex flex-col">
             <div class="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4 mb-8">
-                <!-- 搜尋與篩選區域 (RWD優化版) -->
                 <div class="flex flex-col sm:flex-row flex-wrap w-full lg:w-auto gap-3 flex-grow">
-                    <!-- 關鍵字搜尋 (手機佔滿整行) -->
                     <div class="relative w-full sm:flex-1 sm:min-w-[200px] group">
                         <i class="ph ph-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-lg group-focus-within:text-indigo-400 transition-colors"></i>
                         <input type="text" id="search-input" placeholder="搜尋標籤、描述..." 
                                class="w-full pl-10 pr-4 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-sm transition-all text-white placeholder:text-slate-500">
                     </div>
                     
-                    <!-- 分類與比例下拉 (手機並排) -->
                     <div class="flex gap-3 w-full sm:w-auto">
                         <div class="relative flex-1 sm:w-40">
                             <select id="filter-category" class="w-full pl-4 pr-10 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-sm transition-all text-white appearance-none cursor-pointer">
@@ -231,7 +220,6 @@
                         </div>
                     </div>
 
-                    <!-- 搜尋與重置按鈕 (手機並排) -->
                     <div class="flex gap-2 w-full sm:w-auto">
                         <button id="btn-cloud-search" class="flex-1 sm:flex-none px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl text-sm font-semibold transition-colors shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2" title="深度搜尋所有雲端資料">
                             <i class="ph ph-cloud-magnifying-glass text-lg"></i> <span class="whitespace-nowrap">雲端搜尋</span>
@@ -253,7 +241,7 @@
                 <input type="file" id="file-input" multiple accept="image/*" class="hidden">
             </div>
 
-            <div id="gallery" class="masonry-grid">
+            <div id="gallery" class="masonry-grid flex-grow">
                 <div id="gallery-loading" class="col-span-full py-20 flex flex-col items-center justify-center text-slate-400">
                     <div class="loader mb-4 border-t-indigo-500"></div>
                     <p class="text-sm">載入圖庫中...</p>
@@ -263,14 +251,21 @@
                         <i class="ph ph-image text-4xl text-slate-600"></i>
                     </div>
                     <p class="text-base font-medium text-slate-300 mb-1">查無圖片</p>
-                    <p class="text-xs text-slate-500">如果這是較舊的分類，請點擊右上角「雲端搜尋」抓取歷史圖片</p>
+                    <p class="text-xs text-slate-500 text-center px-4 leading-relaxed">
+                        目前畫面上找不到符合條件的圖片。<br>
+                        如果您確定有這張圖，請點擊上方 <strong class="text-indigo-400">「雲端搜尋」</strong> 深入資料庫抓取！
+                    </p>
                 </div>
             </div>
             
             <div id="infinite-loading" class="hidden w-full py-8 flex-col items-center justify-center text-slate-400">
                 <div class="loader mb-2 w-5 h-5 border-t-indigo-500"></div>
-                <p class="text-xs">載入更多舊圖中...</p>
+                <p class="text-xs">加載中...</p>
             </div>
+            
+            <footer class="mt-12 py-6 border-t border-slate-800 text-center text-xs text-slate-600 w-full">
+                &copy; <script>document.write(new Date().getFullYear())</script> TONY STUDIO (楊文澤顧問) 版權所有 | AI 驅動內容管理系統
+            </footer>
         </main>
     </div>
 
@@ -340,7 +335,7 @@
             <div class="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900">
                 <div>
                     <h2 class="text-lg font-bold text-white flex items-center gap-2"><i class="ph ph-stack text-indigo-400"></i> 處理佇列</h2>
-                    <p class="text-xs text-slate-400 mt-0.5">圖片由本地壓縮後，透過真實 Gemini API 進行 OCR 與標籤生成。</p>
+                    <p class="text-xs text-slate-400 mt-0.5">圖片由本地壓縮後，透過真實 Gemini 3.7 Flash 進行 OCR 與結構化標籤生成。</p>
                 </div>
                 <button id="close-upload-modal" class="w-8 h-8 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-400 flex items-center justify-center"><i class="ph ph-x"></i></button>
             </div>
@@ -489,6 +484,7 @@
 
         const SYSTEM_CREATOR_EMAIL = "mindnodeai@gmail.com";
 
+        // Global State
         let currentUser = null;
         let currentUserRole = "user";
         let uploadQueue = [];
@@ -497,18 +493,21 @@
         let isProcessingAiQueue = false;
         let isUploadingToFirebase = false;
 
+        // Infinite Scroll State
         let lastVisibleDoc = null;
         let isFetchingMore = false;
-        const PAGE_SIZE = 20;
+        let isCloudSearched = false;
+        let localDisplayedCount = 50; 
+        const FIREBASE_PAGE_SIZE = 20;
 
         const DEFAULT_CATEGORIES = ["一鄉一蔬果", "數位行銷科技 ( AI MarTech)", "人間智慧", "微縮世界", "AI未來科技", "財經資訊", "產業發展觀察", "健康養生", "心靈雞湯"];
         let currentCategories = [...DEFAULT_CATEGORIES, "其他"];
 
-        // 核心更新 UI 選單函數
         const updateCategoryDropdowns = () => {
             const filterSelect = document.getElementById('filter-category');
             const editSelect = document.getElementById('lb-edit-category');
-            const curFilter = filterSelect.value; const curEdit = editSelect.value;
+            const curFilter = filterSelect.value; 
+            const curEdit = editSelect.value;
             
             const counts = { '全部分類': galleryData ? galleryData.length : 0 };
             if (galleryData && galleryData.length > 0) {
@@ -531,18 +530,17 @@
             if(currentCategories.includes(curEdit)) editSelect.value = curEdit;
         };
 
-        // 🏆【修復重點】：正確定義全域的記憶功能函數，避免 ReferenceError 崩潰
         window.refreshGlobalCategories = () => {
             const uniqueCats = new Set(DEFAULT_CATEGORIES);
-            // 1. 從畫面上既有的資料統整分類
-            galleryData.forEach(item => { if (item.category && item.category !== '其他') uniqueCats.add(item.category); if (item.customCategory) uniqueCats.add(item.customCategory); });
-            // 2. 從瀏覽器本機快取 (LocalStorage) 取出歷史記憶
+            galleryData.forEach(item => { 
+                if (item.category && item.category !== '其他') uniqueCats.add(item.category); 
+                if (item.customCategory) uniqueCats.add(item.customCategory); 
+            });
             const savedMem = JSON.parse(localStorage.getItem('ai_wisdom_categories') || '[]');
             savedMem.forEach(c => uniqueCats.add(c));
-            // 3. 彙整所有不重複的分類並更新下拉選單
+            
             currentCategories = [...Array.from(uniqueCats), "其他"];
             localStorage.setItem('ai_wisdom_categories', JSON.stringify(currentCategories.filter(c => c !== '其他' && !DEFAULT_CATEGORIES.includes(c))));
-            
             updateCategoryDropdowns();
         };
 
@@ -576,28 +574,58 @@
         };
         
         document.getElementById('btn-confirm-cancel').addEventListener('click', () => {
-            document.getElementById('global-confirm-modal').classList.add('hidden');
-            document.getElementById('global-confirm-modal').classList.remove('flex');
+            const modal = document.getElementById('global-confirm-modal');
+            modal.classList.add('hidden'); modal.classList.remove('flex');
             confirmActionCallback = null;
         });
 
         document.getElementById('btn-confirm-ok').addEventListener('click', async () => {
             const btn = document.getElementById('btn-confirm-ok');
             btn.disabled = true; btn.innerHTML = '<div class="loader w-4 h-4 mx-auto border-t-white"></div>';
-            if (confirmActionCallback) {
-                try { await confirmActionCallback(); } 
-                catch (err) { console.error("Confirm Action Error:", err); }
+            try {
+                if (confirmActionCallback) await confirmActionCallback();
+            } catch (err) { 
+                console.error("Confirm Action Error:", err); 
+                showToast("操作發生錯誤", "error");
+            } finally {
+                const modal = document.getElementById('global-confirm-modal');
+                modal.classList.add('hidden'); modal.classList.remove('flex');
+                btn.disabled = false; btn.innerHTML = '確認執行';
+                confirmActionCallback = null;
             }
-            document.getElementById('global-confirm-modal').classList.add('hidden');
-            document.getElementById('global-confirm-modal').classList.remove('flex');
-            btn.disabled = false; btn.innerHTML = '確認執行';
-            confirmActionCallback = null;
         });
 
         const getApiKey = () => localStorage.getItem('gemini_api_key');
         const checkApiKeyConfigured = () => {
             if (!getApiKey()) { showToast('請先設定 Gemini API Key 才能使用 AI 功能', 'warning'); document.getElementById('btn-open-settings').click(); return false; }
             return true;
+        };
+
+        /**
+         * 企業級防呆解析器：攔截所有異常附帶的 Markdown 標記，強制萃取 {} 內的 JSON 結構。
+         */
+        const robustJSONParse = (rawText) => {
+            try {
+                // 優先嘗試直接解析 (模型若乖乖聽話回傳標準 JSON 時最快)
+                return JSON.parse(rawText);
+            } catch (initialError) {
+                console.warn("初次 JSON 解析失敗，啟動容錯正則提取...", initialError);
+                try {
+                    // 清除常見的 markdown 雜訊
+                    let cleanText = rawText.replace(/```(?:json)?/gi, '').replace(/```/g, '').trim();
+                    const startIdx = cleanText.indexOf('{');
+                    const endIdx = cleanText.lastIndexOf('}');
+                    
+                    if (startIdx !== -1 && endIdx !== -1 && endIdx > startIdx) {
+                        const extractedJSON = cleanText.substring(startIdx, endIdx + 1);
+                        return JSON.parse(extractedJSON);
+                    }
+                    throw new Error("找不到有效的 JSON 結構符號 {}");
+                } catch (fallbackError) {
+                    console.error("容錯解析徹底失敗：", fallbackError, "原始字串：", rawText);
+                    return null;
+                }
+            }
         };
 
         const authAlert = document.getElementById('auth-alert');
@@ -672,18 +700,18 @@
                 if (!userCred.user.emailVerified && userCred.user.email.toLowerCase() !== SYSTEM_CREATOR_EMAIL) {
                     await signOut(auth);
                     showAuthAlert(`⚠️ 您的帳號尚未完成 Email 驗證！<br>請前往信箱點擊確認連結。`, 'error');
-                    btn.disabled = false; btn.innerHTML = '<i class="ph ph-sign-in text-lg"></i> 登入平台';
                     return;
                 }
                 showToast("登入成功！歡迎回來", "success");
             } catch (err) {
-                btn.disabled = false; btn.innerHTML = '<i class="ph ph-sign-in text-lg"></i> 登入平台';
                 if (err.code === 'auth/invalid-credential') showAuthAlert(`登入失敗：帳號密碼錯誤或使用者不存在。<br>如果您是第一次使用，請先點擊上方「新用戶註冊」！`, 'error');
                 else if (err.code === 'auth/unauthorized-domain') {
                     document.getElementById('sandbox-domain-input').value = window.location.hostname || "未知網域";
                     document.getElementById('sandbox-domain-modal').classList.remove('hidden'); document.getElementById('sandbox-domain-modal').classList.add('flex');
                 }
                 else showAuthAlert(`登入失敗：(${err.code})`, 'error');
+            } finally {
+                btn.disabled = false; btn.innerHTML = '<i class="ph ph-sign-in text-lg"></i> 登入平台';
             }
         });
 
@@ -692,25 +720,38 @@
 
         formForgot.addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { await sendPasswordResetEmail(auth, document.getElementById('forgot-email').value.trim()); showAuthAlert(`✅ 密碼重設郵件已發送！`, 'success'); formForgot.reset(); } 
-            catch (err) { showAuthAlert(`發送失敗：${err.message}`, 'error'); }
+            try { 
+                await sendPasswordResetEmail(auth, document.getElementById('forgot-email').value.trim()); 
+                showAuthAlert(`✅ 密碼重設郵件已發送！`, 'success'); 
+                formForgot.reset(); 
+            } catch (err) { showAuthAlert(`發送失敗：${err.message}`, 'error'); }
         });
 
         onAuthStateChanged(auth, async (user) => {
-            const authGateView = document.getElementById('auth-gate-view'), appMainView = document.getElementById('app-main-view');
+            const authGateView = document.getElementById('auth-gate-view');
+            const appMainView = document.getElementById('app-main-view');
+            
             if (user && (user.emailVerified || user.email.toLowerCase() === SYSTEM_CREATOR_EMAIL)) {
                 currentUser = user;
                 const isCreator = user.email.toLowerCase() === SYSTEM_CREATOR_EMAIL;
                 
-                const userSnap = await getDoc(doc(db, "user_profiles", user.uid));
-                if (userSnap.exists()) {
-                    let profileData = userSnap.data();
-                    if (isCreator && profileData.role !== 'admin') { await updateDoc(doc(db, "user_profiles", user.uid), { role: 'admin' }); profileData.role = 'admin'; }
-                    currentUserRole = profileData.role || (isCreator ? 'admin' : 'user');
-                    await updateDoc(doc(db, "user_profiles", user.uid), { loginCount: increment(1) });
+                try {
+                    const userSnap = await getDoc(doc(db, "user_profiles", user.uid));
+                    if (userSnap.exists()) {
+                        let profileData = userSnap.data();
+                        if (isCreator && profileData.role !== 'admin') { 
+                            await updateDoc(doc(db, "user_profiles", user.uid), { role: 'admin' }); 
+                            profileData.role = 'admin'; 
+                        }
+                        currentUserRole = profileData.role || (isCreator ? 'admin' : 'user');
+                        await updateDoc(doc(db, "user_profiles", user.uid), { loginCount: increment(1) });
+                    }
+                } catch (e) {
+                    console.warn("無法取得完整 User Profile，使用預設身份", e);
                 }
 
-                authGateView.classList.add('hidden'); appMainView.classList.remove('hidden', 'flex-col'); appMainView.classList.add('flex', 'flex-col');
+                authGateView.classList.add('hidden'); 
+                appMainView.classList.remove('hidden', 'flex-col'); appMainView.classList.add('flex', 'flex-col');
                 
                 if (currentUserRole === 'admin') document.getElementById('btn-open-admin').classList.remove('hidden');
                 
@@ -727,10 +768,11 @@
                 `;
                 document.getElementById('btn-logout').addEventListener('click', () => { signOut(auth); showToast("已登出", "info"); });
                 
-                fetchGallery();
+                fetchGallery(false);
             } else {
                 currentUser = null; currentUserRole = "user";
-                authGateView.classList.remove('hidden'); appMainView.classList.add('hidden'); appMainView.classList.remove('flex');
+                authGateView.classList.remove('hidden'); 
+                appMainView.classList.add('hidden'); appMainView.classList.remove('flex');
             }
         });
 
@@ -820,29 +862,59 @@
         });
 
         async function processNextInAiQueue() {
-            if (isProcessingAiQueue) return; isProcessingAiQueue = true;
+            if (isProcessingAiQueue) return; 
+            isProcessingAiQueue = true;
+            
             while (true) {
-                const item = uploadQueue.find(i => i.status === 'pending'); if (!item) break;
+                const item = uploadQueue.find(i => i.status === 'pending'); 
+                if (!item) break;
+                
                 try {
                     item.status = 'compressing'; renderQueue();
                     item.compressedFile = await imageCompression(item.originalFile, { maxSizeMB: 1, maxWidthOrHeight: 2048, useWebWorker: true });
                     item.status = 'analyzing'; renderQueue();
                     
                     const base64Str = (await new Promise((res, rej) => { const r = new FileReader(); r.readAsDataURL(item.compressedFile); r.onload=()=>res(r.result); r.onerror=rej; })).split(',')[1];
-                    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key=${getApiKey()}`, {
-                        method: 'POST', headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ contents: [{ parts: [{ text: `請分析這張圖片，用繁體中文回覆。嚴格以 JSON 格式回傳包含 "tags" (字串陣列,最多5個) 與 "description" (詳細圖片描述與OCR文字)。請勿包含任何 markdown 標記。` }, { inline_data: { mime_type: item.compressedFile.type, data: base64Str } }] }], generationConfig: { temperature: 0.2 } })
+                    
+                    // 優化的高級 AI System Prompt (強迫結構化輸出)
+                    const promptText = `你是一個專業的視覺分析與資料結構化專家。請精準分析圖片內容與文字(OCR)，並嚴格按照指定的 JSON 格式輸出。絕對不要包含 Markdown 標記 (如 \`\`\`json) 或任何說明。
+格式規範：
+{"tags": ["標籤1", "標籤2"], "description": "詳細圖片情境與完整OCR轉錄"}
+(備註：標籤為字串陣列，最多 5 個具代表性的繁體中文標籤。若無特定內容請填寫適當預設值。)`;
+
+                    const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-3.7-flash:generateContent?key=${getApiKey()}`, {
+                        method: 'POST', 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            contents: [{ parts: [{ text: promptText }, { inline_data: { mime_type: item.compressedFile.type, data: base64Str } }] }], 
+                            generationConfig: { 
+                                temperature: 0.1, 
+                                response_mime_type: "application/json" // 從物理層面逼迫 Gemini 輸出 JSON
+                            } 
+                        })
                     });
-                    if (!res.ok) throw new Error("API Request Failed");
+                    
+                    if (!res.ok) throw new Error(`API Request Failed: ${res.status}`);
+                    
                     const data = await res.json();
-                    let textResp = data.candidates[0].content.parts[0].text;
-                    const start = textResp.indexOf('{'); const end = textResp.lastIndexOf('}');
-                    if (start > -1 && end > -1) {
-                        const parsed = JSON.parse(textResp.substring(start, end + 1));
-                        item.tags = parsed.tags || []; item.description = parsed.description || '';
-                    } else { item.tags = ["分析失敗"]; item.description = "無法解析 AI 回傳格式"; }
+                    let rawTextResp = data.candidates[0].content.parts[0].text;
+                    
+                    // 使用容錯提取解析 JSON
+                    const parsedData = robustJSONParse(rawTextResp);
+                    if (parsedData) {
+                        item.tags = parsedData.tags || ["未分類標籤"]; 
+                        item.description = parsedData.description || '無描述內容';
+                    } else {
+                        item.tags = ["分析格式錯誤"]; 
+                        item.description = "無法解析 AI 回傳格式 (需手動編輯)"; 
+                    }
                     item.status = 'ready';
-                } catch (err) { item.status = 'error'; console.error("OCR Error:", err); }
+                } catch (err) { 
+                    item.status = 'error'; 
+                    item.tags = ["系統錯誤"];
+                    item.description = `發生錯誤: ${err.message}`;
+                    console.error("OCR Error:", err); 
+                }
                 renderQueue();
             }
             isProcessingAiQueue = false;
@@ -860,6 +932,7 @@
                 else if (item.status === 'analyzing') badge = `<span class="px-2 py-0.5 bg-indigo-950 text-indigo-300 rounded text-[10px] flex items-center gap-1"><div class="loader w-2.5 h-2.5 border-t-indigo-300"></div> AI辨識中</span>`;
                 else if (item.status === 'uploading') badge = `<span class="px-2 py-0.5 bg-blue-950 text-blue-300 rounded text-[10px] animate-pulse">雲端寫入中...</span>`;
                 else if (item.status === 'ready') badge = `<span class="px-2 py-0.5 bg-emerald-950 text-emerald-300 rounded text-[10px]">就緒</span>`;
+                else if (item.status === 'error') badge = `<span class="px-2 py-0.5 bg-red-950 text-red-300 rounded text-[10px]">發生錯誤</span>`;
                 
                 return `
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex gap-4 transition-all ${isUploadingToFirebase ? 'opacity-70 grayscale-[30%]' : ''}">
@@ -884,7 +957,9 @@
             }).join('');
             
             const btn = document.getElementById('btn-confirm-uploads');
-            const rCount = uploadQueue.filter(i => i.status === 'ready').length, pCount = uploadQueue.filter(i => ['pending', 'compressing', 'analyzing'].includes(i.status)).length;
+            const rCount = uploadQueue.filter(i => i.status === 'ready' || i.status === 'error').length;
+            const pCount = uploadQueue.filter(i => ['pending', 'compressing', 'analyzing'].includes(i.status)).length;
+            
             document.getElementById('queue-stats').innerHTML = `<span class="font-bold text-white">${rCount}</span> 個項目已準備就緒 ${pCount > 0 ? `<span class="text-amber-400 ml-2">• ${pCount} 處理中...</span>` : ''} ${isUploadingToFirebase ? `<span class="text-blue-400 ml-2 font-bold animate-pulse">• 正在寫入雲端...</span>` : ''}`;
 
             if (isUploadingToFirebase) {
@@ -896,7 +971,9 @@
             } else if (rCount > 0) {
                 btn.disabled = false; btn.innerHTML = '<i class="ph ph-cloud-arrow-up text-base"></i> 確定上傳';
                 btn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-slate-700'); btn.classList.add('bg-indigo-600', 'hover:bg-indigo-500');
-            } else btn.disabled = true;
+            } else {
+                btn.disabled = true;
+            }
         }
 
         document.getElementById('close-upload-modal').addEventListener('click', () => { if(!isUploadingToFirebase) { uploadQueue=[]; renderQueue(); } });
@@ -905,7 +982,9 @@
         document.getElementById('btn-confirm-uploads').addEventListener('click', async () => {
             if (!currentUser || isUploadingToFirebase) return;
             isUploadingToFirebase = true; renderQueue();
-            const readyItems = uploadQueue.filter(i => i.status === 'ready');
+            
+            // Allow ready and error items to be uploaded (error items fallback to manual edit later)
+            const readyItems = uploadQueue.filter(i => i.status === 'ready' || i.status === 'error');
             
             for (let item of readyItems) {
                 try {
@@ -919,36 +998,81 @@
                         uid: currentUser.uid, createdAt: serverTimestamp()
                     });
                     item.status = 'done';
-                } catch (err) { item.status = 'error'; console.error(err); }
+                } catch (err) { 
+                    item.status = 'error'; 
+                    console.error("Firebase Upload Error:", err); 
+                }
                 renderQueue();
             }
-            isUploadingToFirebase = false; showToast("上傳完畢！", "success"); uploadQueue = []; renderQueue(); fetchGallery();
+            
+            isUploadingToFirebase = false; 
+            showToast("上傳階段完畢！", "success"); 
+            
+            // 留下錯誤的，清除成功的
+            uploadQueue = uploadQueue.filter(i => i.status === 'error');
+            if (uploadQueue.length === 0) {
+                document.getElementById('upload-modal').classList.add('hidden');
+                document.getElementById('upload-modal').classList.remove('flex');
+            }
+            renderQueue(); 
+            
+            // 重新取得最新資料
+            isCloudSearched = false;
+            fetchGallery(false);
         });
 
         async function fetchGallery(loadMore = false) {
-            if (isFetchingMore) return; isFetchingMore = true;
-            if (!loadMore) { document.getElementById('gallery-loading').classList.remove('hidden'); galleryData = []; lastVisibleDoc = null; document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove()); } 
-            else { document.getElementById('infinite-loading').classList.remove('hidden'); document.getElementById('infinite-loading').classList.add('flex'); }
+            if (isFetchingMore) return; 
+            isFetchingMore = true;
+            
+            if (!loadMore) { 
+                document.getElementById('gallery-loading').classList.remove('hidden'); 
+                galleryData = []; 
+                lastVisibleDoc = null; 
+                document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove()); 
+            } else { 
+                document.getElementById('infinite-loading').classList.remove('hidden'); 
+                document.getElementById('infinite-loading').classList.add('flex'); 
+            }
 
             try {
-                let q = loadMore && lastVisibleDoc ? query(collection(db, "assets"), orderBy("createdAt", "desc"), startAfter(lastVisibleDoc), limit(PAGE_SIZE)) : query(collection(db, "assets"), orderBy("createdAt", "desc"), limit(PAGE_SIZE));
+                let q = loadMore && lastVisibleDoc 
+                    ? query(collection(db, "assets"), orderBy("createdAt", "desc"), startAfter(lastVisibleDoc), limit(FIREBASE_PAGE_SIZE)) 
+                    : query(collection(db, "assets"), orderBy("createdAt", "desc"), limit(FIREBASE_PAGE_SIZE));
+                
                 const snap = await getDocs(q);
-                if (!snap.empty) { lastVisibleDoc = snap.docs[snap.docs.length - 1]; snap.forEach(d => galleryData.push({ id: d.id, ...d.data() })); }
+                if (!snap.empty) { 
+                    lastVisibleDoc = snap.docs[snap.docs.length - 1]; 
+                    snap.forEach(d => galleryData.push({ id: d.id, ...d.data() })); 
+                }
                 
                 window.refreshGlobalCategories();
-                renderGallery();
-            } catch (err) { console.error("Fetch Gallery Error:", err); showToast('載入圖片失敗', 'error'); } 
-            finally {
+                renderGallery(true); // Always reset display pointer on new fetch
+            } catch (err) { 
+                console.error("Fetch Gallery Error:", err); 
+                showToast('載入圖片失敗', 'error'); 
+            } finally {
                 document.getElementById('gallery-loading').classList.add('hidden');
-                document.getElementById('infinite-loading').classList.add('hidden'); document.getElementById('infinite-loading').classList.remove('flex');
+                document.getElementById('infinite-loading').classList.add('hidden'); 
+                document.getElementById('infinite-loading').classList.remove('flex');
                 isFetchingMore = false;
             }
         }
 
-        function renderGallery() {
-            document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove());
-            const term = document.getElementById('search-input').value.toLowerCase().trim(), cat = document.getElementById('filter-category').value, ratio = document.getElementById('filter-ratio').value;
+        /**
+         * 企業級 Hybrid 渲染器：支援本機防崩潰的分頁，無論陣列中有 10000 張圖，皆安全畫出。
+         */
+        window.renderGallery = (resetDisplayCount = true) => {
+            if (resetDisplayCount) {
+                localDisplayedCount = 50; 
+                document.getElementById('gallery').querySelectorAll('.masonry-item').forEach(i => i.remove());
+            }
+            
+            const term = document.getElementById('search-input').value.toLowerCase().trim();
+            const cat = document.getElementById('filter-category').value; 
+            const ratio = document.getElementById('filter-ratio').value;
 
+            // 1. 全文比對篩選
             let filtered = galleryData.filter(item => {
                 let mTerm = !term || (item.tags?.some(t => t.toLowerCase().includes(term)) || item.description?.toLowerCase().includes(term) || item.category?.toLowerCase().includes(term) || item.customCategory?.toLowerCase().includes(term));
                 let mCat = !cat || item.category === cat || item.customCategory === cat;
@@ -956,38 +1080,64 @@
                 return mTerm && mCat && mRatio;
             });
 
-            if (filtered.length === 0) { document.getElementById('gallery-empty').classList.remove('hidden'); return; }
+            if (filtered.length === 0) { 
+                document.getElementById('gallery-empty').classList.remove('hidden'); 
+                return; 
+            }
+            
             document.getElementById('gallery-empty').classList.add('hidden');
 
-            // ⚠️ 畫面保護機制：網頁一次最多畫出 100 張，防止記憶體崩潰
-            if (filtered.length > 100) {
-                showToast(`找到 ${filtered.length} 張圖片，為保持網頁順暢，僅顯示前 100 張，請輸入關鍵字縮小範圍。`, 'warning');
-                filtered = filtered.slice(0, 100);
-            }
+            // 2. 擷取「準備繪製」的批次範圍 (防記憶體暴增)
+            const toRender = resetDisplayCount 
+                ? filtered.slice(0, localDisplayedCount) 
+                : filtered.slice(localDisplayedCount - 50, localDisplayedCount);
 
-            filtered.forEach(item => {
+            // 3. 畫出 DOM
+            toRender.forEach(item => {
                 const dispCat = item.category === '其他' && item.customCategory ? item.customCategory : (item.category || '未分類');
-                const card = document.createElement('div'); card.className = 'masonry-item relative group cursor-pointer rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 transition-all hover:border-indigo-500/50 animate-fade-in';
+                const card = document.createElement('div'); 
+                card.className = 'masonry-item relative group cursor-pointer rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 transition-all hover:border-indigo-500/50 animate-fade-in';
                 card.innerHTML = `
                     <img src="${item.url}" onerror="this.src='https://placehold.co/400x300/1e293b/475569?text=Missing'" class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
                     <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                        <div class="flex gap-2 mb-2"><span class="px-2 py-0.5 bg-indigo-500 text-white text-[10px] font-bold rounded">${dispCat}</span><span class="px-2 py-0.5 bg-black/60 text-slate-300 text-[10px] rounded border border-slate-600">${item.aspectRatio || '未判斷'}</span></div>
+                        <div class="flex gap-2 mb-2"><span class="px-2 py-0.5 bg-indigo-500 text-white text-[10px] font-bold rounded shadow">${dispCat}</span><span class="px-2 py-0.5 bg-black/60 text-slate-300 text-[10px] rounded border border-slate-600">${item.aspectRatio || '未判斷'}</span></div>
                         <p class="text-xs text-slate-300 line-clamp-2">${item.description || ''}</p>
                     </div>`;
                 card.addEventListener('click', () => openLightbox(item));
                 document.getElementById('gallery').appendChild(card);
             });
-        }
+        };
 
-        document.getElementById('search-input').addEventListener('input', renderGallery); 
-        document.getElementById('filter-category').addEventListener('change', renderGallery); 
-        document.getElementById('filter-ratio').addEventListener('change', renderGallery);
+        // 綁定過濾器事件 (重置渲染指針)
+        document.getElementById('search-input').addEventListener('input', () => renderGallery(true)); 
+        document.getElementById('filter-category').addEventListener('change', () => renderGallery(true)); 
+        document.getElementById('filter-ratio').addEventListener('change', () => renderGallery(true));
+
+        window.addEventListener('scroll', () => {
+            if (!currentUser || document.getElementById('app-main-view').classList.contains('hidden') || isFetchingMore) return;
+            
+            // 當滾動到接近底部 800px 時
+            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
+                // 如果目前是 Cloud Searched 狀態 (資料都在本機記憶體)
+                if (isCloudSearched) {
+                    // 只檢查過濾後的總數，若尚未顯示完畢，則本機遞增渲染
+                    localDisplayedCount += 50;
+                    renderGallery(false); 
+                } else {
+                    // 原生 Firebase 分頁邏輯 (僅在無條件限制時觸發向雲端請求)
+                    if (document.getElementById('search-input').value === '' && document.getElementById('filter-category').value === '' && document.getElementById('filter-ratio').value === '') {
+                        fetchGallery(true);
+                    }
+                }
+            }
+        });
 
         document.getElementById('btn-cloud-search').addEventListener('click', async () => {
             const btn = document.getElementById('btn-cloud-search'); 
             const originalHtml = btn.innerHTML;
             btn.disabled = true; 
             
+            // 建立高識別度進度膠囊
             let progressPill = document.getElementById('floating-progress-pill');
             if (!progressPill) {
                 progressPill = document.createElement('div');
@@ -999,14 +1149,14 @@
             progressPill.classList.remove('hidden');
             progressPill.classList.replace('bg-red-950/95', 'bg-indigo-600/95');
 
-            // 🔥 絕不白畫面：舊畫面留在原地，背景用暫存陣列默默抓資料
+            // 保持舊畫面，後台安靜下載
             document.getElementById('gallery-loading').classList.remove('hidden');
             let tempGalleryData = []; 
-            window.isCloudSearched = true; // 標記已啟動全庫搜尋
+            isCloudSearched = true; 
             
             let currentBatchDoc = null;
             let totalFetched = 0;
-            const BATCH_SIZE = 1000; // 放大封包到 1000，極大幅度減少斷線機率
+            const BATCH_SIZE = 1000; 
             const MAX_FETCH = 15000; 
 
             try {
@@ -1019,7 +1169,7 @@
                     try {
                         snap = await getDocs(q);
                     } catch (dbErr) {
-                        console.warn("重連中...", dbErr);
+                        console.warn("網路連線抖動，啟動自動重連...", dbErr);
                         progressPill.innerHTML = `<i class="ph ph-warning-circle text-amber-300 text-xl"></i><div class="font-bold text-sm">網路微幅抖動，自動重連中...</div>`;
                         await new Promise(r => setTimeout(r, 2000)); 
                         snap = await getDocs(q);
@@ -1040,7 +1190,7 @@
                 progressPill.innerHTML = `<i class="ph-fill ph-check-circle text-emerald-400 text-xl"></i><div class="font-bold text-sm">同步完畢！共 ${totalFetched} 張，正在排版...</div>`;
                 progressPill.classList.replace('bg-indigo-600/95', 'bg-slate-900/95');
                 
-                // 全部載完後，才覆蓋正式陣列並排序
+                // 替換全域資料並排序
                 galleryData = tempGalleryData;
                 galleryData.sort((a, b) => {
                     let timeA = a.createdAt ? a.createdAt.seconds : 0;
@@ -1049,29 +1199,26 @@
                 });
                 
                 window.refreshGlobalCategories();
-                renderGallery(false); // 呼叫最新引擎，它會自動只畫出前 50 張防當機
+                renderGallery(true); // 啟動本地防崩潰引擎，首頁只畫 50 張
 
-                if (galleryData.length > 0) showToast(`雲端圖庫同步成功！`, 'success');
+                if (galleryData.length > 0) showToast(`全庫資料同步成功！`, 'success');
 
             } catch(err) { 
-                progressPill.innerHTML = `<i class="ph-fill ph-x-circle text-red-400 text-xl"></i><div class="font-bold text-sm">連線嚴重中斷，請稍後重試</div>`;
+                console.error("Cloud Search Final Error:", err);
+                progressPill.innerHTML = `<i class="ph-fill ph-x-circle text-red-400 text-xl"></i><div class="font-bold text-sm">連線嚴重中斷，請確認網路環境後重試</div>`;
                 progressPill.classList.replace('bg-indigo-600/95', 'bg-red-950/95');
             } finally { 
                 btn.disabled = false; btn.innerHTML = originalHtml; 
                 document.getElementById('gallery-loading').classList.add('hidden'); 
-                setTimeout(() => progressPill.classList.add('hidden'), 4000);
+                setTimeout(() => { if(progressPill) progressPill.classList.add('hidden'); }, 4000);
             }
         });
 
         document.getElementById('btn-reset-search').addEventListener('click', () => {
-            document.getElementById('search-input').value = ''; document.getElementById('filter-category').value = ''; document.getElementById('filter-ratio').value = ''; renderGallery();
-        });
-
-        window.addEventListener('scroll', () => {
-            if (!currentUser || document.getElementById('app-main-view').classList.contains('hidden') || isFetchingMore) return;
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) {
-                if (document.getElementById('search-input').value === '' && document.getElementById('filter-category').value === '' && document.getElementById('filter-ratio').value === '') fetchGallery(true);
-            }
+            document.getElementById('search-input').value = ''; 
+            document.getElementById('filter-category').value = ''; 
+            document.getElementById('filter-ratio').value = ''; 
+            renderGallery(true);
         });
 
         const lightbox = document.getElementById('lightbox');
@@ -1090,7 +1237,7 @@
             
             const dispCat = item.category === '其他' && item.customCategory ? item.customCategory : (item.category || '未分類');
             document.getElementById('lb-meta-tags').innerHTML = `<span class="px-2.5 py-1 bg-indigo-950 text-indigo-300 rounded-md text-xs font-bold">${dispCat}</span>`;
-            document.getElementById('lb-tags').innerHTML = (item.tags||[]).map(t => `<span class="px-2.5 py-1 bg-slate-800 text-indigo-300 rounded-xl text-xs">${t}</span>`).join('');
+            document.getElementById('lb-tags').innerHTML = (item.tags||[]).map(t => `<span class="px-2.5 py-1 bg-slate-800 text-indigo-300 rounded-xl text-xs shadow">${t}</span>`).join('');
             document.getElementById('lb-desc').textContent = item.description || '無描述';
 
             lightbox.classList.remove('hidden'); lightbox.classList.add('flex');
@@ -1103,7 +1250,7 @@
             await deleteDoc(doc(db, "assets", assetItem.id));
             galleryData = galleryData.filter(item => item.id !== assetItem.id); 
             window.refreshGlobalCategories();
-            renderGallery();
+            renderGallery(true);
         };
 
         document.getElementById('lb-btn-delete').addEventListener('click', () => {
@@ -1130,7 +1277,6 @@
             showToast('已成功複製圖片專屬直接網址！', 'success');
         });
 
-        // 🏆【修復重點】：正確顯示隱藏的自訂分類輸入框
         document.getElementById('lb-btn-edit').addEventListener('click', () => {
             if (!currentLightboxItem) return;
             document.getElementById('lb-edit-category').value = currentLightboxItem.category || '未分類';
@@ -1157,19 +1303,29 @@
 
         document.getElementById('lb-btn-cancel-edit').addEventListener('click', () => { document.getElementById('lb-read-mode').classList.remove('hidden'); document.getElementById('lb-edit-mode').classList.add('hidden'); document.getElementById('lb-edit-mode').classList.remove('flex'); });
 
-        // 🏆【修復重點】：呼叫正確的 window.refreshGlobalCategories()，並加上除錯錯誤捕捉
         document.getElementById('lb-btn-save-edit').addEventListener('click', async () => {
-            if (!currentLightboxItem) return; const btn = document.getElementById('lb-btn-save-edit'); btn.disabled = true; btn.innerHTML = '儲存中...';
+            if (!currentLightboxItem) return; 
+            const btn = document.getElementById('lb-btn-save-edit'); 
+            btn.disabled = true; btn.innerHTML = '儲存中...';
             try {
-                const newCat = document.getElementById('lb-edit-category').value, newTags = document.getElementById('lb-edit-tags').value.split(',').map(t=>t.trim()).filter(t=>t), newDesc = document.getElementById('lb-edit-desc').value;
+                const newCat = document.getElementById('lb-edit-category').value;
+                const newTags = document.getElementById('lb-edit-tags').value.split(',').map(t=>t.trim()).filter(t=>t);
+                const newDesc = document.getElementById('lb-edit-desc').value;
                 const newCustom = newCat === '其他' ? document.getElementById('lb-edit-custom-category').value.trim() : '';
+                
                 await updateDoc(doc(db, "assets", currentLightboxItem.id), { category: newCat, customCategory: newCustom, tags: newTags, description: newDesc });
-                currentLightboxItem.category = newCat; currentLightboxItem.customCategory = newCustom; currentLightboxItem.tags = newTags; currentLightboxItem.description = newDesc;
-                const idx = galleryData.findIndex(i => i.id === currentLightboxItem.id); if(idx>-1) galleryData[idx] = {...currentLightboxItem};
+                
+                currentLightboxItem.category = newCat; currentLightboxItem.customCategory = newCustom; 
+                currentLightboxItem.tags = newTags; currentLightboxItem.description = newDesc;
+                
+                const idx = galleryData.findIndex(i => i.id === currentLightboxItem.id); 
+                if(idx > -1) galleryData[idx] = {...currentLightboxItem};
                 
                 window.refreshGlobalCategories();
-                
-                document.getElementById('lb-btn-cancel-edit').click(); renderGallery(); showToast('資訊已更新', 'success'); openLightbox(currentLightboxItem);
+                document.getElementById('lb-btn-cancel-edit').click(); 
+                renderGallery(true); 
+                showToast('資訊已更新', 'success'); 
+                openLightbox(currentLightboxItem); // Refresh Lightbox view
             } catch (err) { 
                 console.error("更新檔案失敗：", err); 
                 showToast(`更新失敗: ${err.message || '請確認權限或網路'}`, 'error'); 
@@ -1181,17 +1337,40 @@
         const btnGen = document.getElementById('btn-generate-article');
         btnGen.addEventListener('click', async () => {
             if (!currentLightboxItem || !checkApiKeyConfigured()) return;
-            btnGen.disabled = true; btnGen.innerHTML = `<div class="loader w-3 h-3 border-t-white"></div>`;
+            btnGen.disabled = true; 
+            btnGen.innerHTML = `<div class="loader w-3 h-3 border-t-white mr-2"></div> 運算中...`;
+            
             try {
+                // 強固提示詞，確保文案品質
+                const promptPayload = `你是一位資深社群媒體文案專家 (TONY STUDIO 專屬 AI 顧問)。
+請根據以下提供的資訊，撰寫一篇吸引人的行銷文案 (繁體中文)，文案須具有感染力並適度使用 Emoji。
+
+[資產資訊]
+標籤: ${currentLightboxItem.tags?.join(',')}
+圖片內文與描述: ${currentLightboxItem.description}`;
+
                 const res = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-3.7-flash:generateContent?key=${getApiKey()}`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: `請根據以下資訊撰寫一篇行銷文案 (繁體中文)：\n標籤: ${currentLightboxItem.tags?.join(',')}\n內文/描述: ${currentLightboxItem.description}` }] }] })
+                    method: 'POST', 
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        contents: [{ parts: [{ text: promptPayload }] }],
+                        generationConfig: { temperature: 0.7 } 
+                    })
                 });
+                
+                if(!res.ok) throw new Error("文案生成 API 呼叫失敗");
+                
                 const data = await res.json();
                 document.getElementById('generated-article').value = data.candidates[0].content.parts[0].text;
-                document.getElementById('article-output-area').classList.remove('hidden'); document.getElementById('article-output-area').classList.add('flex');
-                showToast('文章生成完成', 'success');
-            } catch (err) { showToast('生成失敗', 'error'); } finally { btnGen.disabled = false; btnGen.innerHTML = '重新撰寫'; }
+                document.getElementById('article-output-area').classList.remove('hidden'); 
+                document.getElementById('article-output-area').classList.add('flex');
+                showToast('文章生成完成！', 'success');
+            } catch (err) { 
+                console.error(err);
+                showToast('生成失敗，請檢查 API Key 或網路狀態', 'error'); 
+            } finally { 
+                btnGen.disabled = false; btnGen.innerHTML = '重新撰寫文案'; 
+            }
         });
 
         document.getElementById('btn-copy-article').addEventListener('click', () => { const ta = document.getElementById('generated-article'); ta.select(); document.execCommand('copy'); showToast('文章已複製', 'success'); });
@@ -1207,10 +1386,18 @@
         document.getElementById('btn-close-duplicates').addEventListener('click', () => { document.getElementById('duplicate-modal').classList.add('hidden'); document.getElementById('duplicate-modal').classList.remove('flex'); });
 
         window.renderDuplicateGroups = () => {
-            const groups = {}; galleryData.forEach(item => { const name = item.filename || '未知檔案'; if (!groups[name]) groups[name] = []; groups[name].push(item); });
+            const groups = {}; 
+            galleryData.forEach(item => { 
+                const name = item.filename || '未知檔案'; 
+                if (!groups[name]) groups[name] = []; 
+                groups[name].push(item); 
+            });
             const dups = Object.entries(groups).filter(([_, items]) => items.length > 1);
 
-            if (dups.length === 0) { document.getElementById('duplicate-list').innerHTML = `<div class="py-20 text-center text-slate-400">太棒了！目前沒有發現任何重複的圖片</div>`; return; }
+            if (dups.length === 0) { 
+                document.getElementById('duplicate-list').innerHTML = `<div class="py-20 text-center text-slate-400 font-medium">太棒了！目前系統中沒有發現任何重複上傳的圖片</div>`; 
+                return; 
+            }
 
             document.getElementById('duplicate-list').innerHTML = dups.map(([filename, items]) => `
                 <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 mb-5 animate-fade-in">
